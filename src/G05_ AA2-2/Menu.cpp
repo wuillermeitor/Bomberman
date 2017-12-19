@@ -10,6 +10,18 @@ Menu::Menu()
 	std::string BGPath = "../../res/img/bgGame.jpg";
 	Renderer::Instance()->LoadTexture(BG_ID, BGPath);
 
+	//Music
+	const Uint8 mixFlags{ MIX_INIT_MP3 | MIX_INIT_OGG };
+	if (!(Mix_Init(mixFlags) & mixFlags))throw"Error:SDL_mixer init";
+	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
+		throw "Unable o initialize SDL_mixer audio systems";
+	}
+	Mix_Music *soundtrack{ Mix_LoadMUS("../../res/au/menu.mp3") };
+	if (!soundtrack) throw "Unable to load the Mix_Music soundtrack";
+	Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+	Mix_PlayMusic(soundtrack, -1);
+	audio = true;
+
 	//Button Play Level 1
 	ButtonPlayLvl1 = Button();
 	ButtonPlayLvl1.font.id = "game_over";
@@ -53,13 +65,47 @@ Menu::Menu()
 	ButtonRanking.texto.color = ButtonRanking.color;
 	ButtonRanking.texto.id = "texto3_ID";
 	ButtonRanking.texto.text = "Ranking";
-	ButtonRanking.texto.h = 50;
-	ButtonRanking.texto.w = 100;
+	ButtonRanking.texto.h = 70;
+	ButtonRanking.texto.w = 120;
 	ButtonRanking.XpositionText = SCREEN_WIDTH / 2 - ButtonRanking.texto.w / 2;
-	ButtonRanking.YpositionText = (SCREEN_HEIGHT / 2) + 100;
+	ButtonRanking.YpositionText = (SCREEN_HEIGHT / 2) + 75;
 	Renderer::Instance()->LoadFont(ButtonRanking.font);
 	Renderer::Instance()->LoadTextureText(ButtonRanking.font.id, ButtonRanking.texto);
 	ButtonRanking.Texto_Rect = { ButtonRanking.XpositionText, ButtonRanking.YpositionText, ButtonRanking.texto.w, ButtonRanking.texto.h };
+
+	//Button Mute
+	ButtonMute = Button();
+	ButtonMute.font.id = "game_over";
+	ButtonMute.font.path = "../../res/ttf/game_over.ttf";
+	ButtonMute.font.size = 50;
+	ButtonMute.color = { 255, 0, 0, 0 };
+	ButtonMute.texto.color = ButtonMute.color;
+	ButtonMute.texto.id = "texto4_ID";
+	ButtonMute.texto.text = "Desactivar so";
+	ButtonMute.texto.h = 70;
+	ButtonMute.texto.w = 170;
+	ButtonMute.XpositionText = SCREEN_WIDTH / 2 - ButtonMute.texto.w / 2;
+	ButtonMute.YpositionText = (SCREEN_HEIGHT / 2) + 125;
+	Renderer::Instance()->LoadFont(ButtonMute.font);
+	Renderer::Instance()->LoadTextureText(ButtonMute.font.id, ButtonMute.texto);
+	ButtonMute.Texto_Rect = { ButtonMute.XpositionText, ButtonMute.YpositionText, ButtonMute.texto.w, ButtonMute.texto.h };
+
+	//Button Exit
+	ButtonExit = Button();
+	ButtonExit.font.id = "game_over";
+	ButtonExit.font.path = "../../res/ttf/game_over.ttf";
+	ButtonExit.font.size = 50;
+	ButtonExit.color = { 255, 0, 0, 0 };
+	ButtonExit.texto.color = ButtonExit.color;
+	ButtonExit.texto.id = "texto5_ID";
+	ButtonExit.texto.text = "Sortir";
+	ButtonExit.texto.h = 70;
+	ButtonExit.texto.w = 100;
+	ButtonExit.XpositionText = SCREEN_WIDTH / 2 - ButtonExit.texto.w / 2;
+	ButtonExit.YpositionText = (SCREEN_HEIGHT / 2) + 175;
+	Renderer::Instance()->LoadFont(ButtonExit.font);
+	Renderer::Instance()->LoadTextureText(ButtonExit.font.id, ButtonExit.texto);
+	ButtonExit.Texto_Rect = { ButtonExit.XpositionText, ButtonExit.YpositionText, ButtonExit.texto.w, ButtonExit.texto.h };
 }
 
 
@@ -73,6 +119,8 @@ void Menu::EventHandler() {
 		ButtonPlayLvl1.eventHandler(evento);
 		ButtonPlayLvl2.eventHandler(evento);
 		ButtonRanking.eventHandler(evento);
+		ButtonMute.eventHandler(evento);
+		ButtonExit.eventHandler(evento);
 		if (ButtonPlayLvl1.isClicked()) {
 			scenestate = SceneState::GOTOLVL1;
 		}
@@ -82,6 +130,19 @@ void Menu::EventHandler() {
 		else if (ButtonRanking.isClicked()) {
 			scenestate = SceneState::GOTORANKING;
 		}
+		else if (ButtonMute.isClicked()) {
+			if (audio == true) {
+				Mix_PauseMusic();
+				audio = false;
+			}
+			else {
+				Mix_ResumeMusic();
+				audio = true;
+			}
+		}
+		else if (ButtonExit.isClicked()) {
+			exit(0);
+		}
 	}
 }
 
@@ -89,6 +150,8 @@ void Menu::Update() {
 	ButtonPlayLvl1.update();
 	ButtonPlayLvl2.update();
 	ButtonRanking.update();
+	ButtonMute.update();
+	ButtonExit.update();
 }
 
 void Menu::Draw() {
@@ -96,6 +159,12 @@ void Menu::Draw() {
 	ButtonPlayLvl1.draw();
 	ButtonPlayLvl2.draw();
 	ButtonRanking.draw();
+	ButtonMute.draw();
+	ButtonExit.draw();
 	Renderer::Instance()->Render();
 	Renderer::Instance()->Clear();
+}
+
+bool Menu::GetAudio() {
+	return audio;
 }
