@@ -145,7 +145,7 @@ Bomb::~Bomb() {
 }
 
 void Bomb::Update() {
-	tmpPosXY = lvl.CoordenadaACasilla(Bombas_Position.x, Bombas_Position.y);
+	//tmpPosXY = CoordenadaACasilla(Bombas_Position.x, Bombas_Position.y);
 	if (timeDown > 0) {
 		deltaTime = (clock() - lastTime);
 		lastTime = clock();

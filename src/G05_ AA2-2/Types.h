@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <SDL.h>
+#include "Constants.h"
 
 using Rect = struct  Rect { int  x; int y; int w; int h; };
 

@@ -3,6 +3,7 @@
 #include "Types.h"
 #include "Constants.h"
 #include "Wall.h"
+#include "Bomb.h"
 
 class Level {
 public:
@@ -24,12 +25,11 @@ public:
 	Wall Indestructible_wall;
 
 
-	Vector2 CoordenadaACasilla(int x, int y);
-
-	Vector2 CasillaACoordenada(int i, int j);
-
 	Level();
 	~Level();
+
+	Vector2 CasillaACoordenada(int i, int j);
+	Vector2 CoordenadaACasilla(int x, int y);
 
 
 	void Draw();

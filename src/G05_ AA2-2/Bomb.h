@@ -3,7 +3,6 @@
 #include <iostream>
 #include "Types.h"
 #include "Renderer.h"
-#include "Level.h"
 
 
 
@@ -45,6 +44,5 @@ public:
 	float deltaTime = 0;
 	bool explosion = false;
 	bool explotando = false;
-	Level lvl;
 
 };

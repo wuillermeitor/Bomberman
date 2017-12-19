@@ -8,37 +8,37 @@ Play::Play(std::string level) {
 	std::string BGPath = "../../res/img/bgGame.jpg";
 	Renderer::Instance()->LoadTexture(BG_ID, BGPath);
 	if (level == "PLAY1") {
-		lvl1 = Level();
+		lvl = Level();
 	}
 	else if (level == "PLAY2") {
-		lvl2 = Level();
+		lvl = Level();
 		std::cout << "He entrado en el nivel 2" << std::endl;
 		Renderer::Instance()->LoadTexture(BACKGROUND, "../../res/img/bgGame.jpg");
-		for (int i = 0; i < lvl2.casillasAncho; i++) {
-			lvl2.tablero[i] = new casillas[lvl2.casillasAlto];
-			for (int j = 0; j < lvl2.casillasAlto; j++) {
+		for (int i = 0; i < lvl.casillasAncho; i++) {
+			lvl.tablero[i] = new casillas[lvl.casillasAlto];
+			for (int j = 0; j < lvl.casillasAlto; j++) {
 				if ((j == 0) && (i == 0) || (j == 1) && (i == 0) || (j == 0) && (i == 1) || (j == 12) && (i == 10) || (j == 11) && (i == 10) || (j == 12) && (i == 9)) {
-					lvl2.tablero[i][j] = casillas::EMPTY;
+					lvl.tablero[i][j] = casillas::EMPTY;
 					//std::cout << "Casillas vacias" << std::endl;
 				}
 				else if (((j == 0) && (i == 10) || (j == 0) && (i == 9) || (j == 1) && (i == 10) || (j == 11) && (i == 0) || (j == 12) && (i == 0) || (j == 12) && (i == 1))) {
-					lvl2.tablero[i][j] = casillas::EMPTY;
+					lvl.tablero[i][j] = casillas::EMPTY;
 					//std::cout << "Casillas vacias" << std::endl;
 				}
 				else if ((i == 1 || i == 3 || i == 5 || i == 7 || i == 9) && (j == 1 || j == 3 || j == 5 || j == 7 || j == 9 || j == 11)) {
-					lvl2.tablero[i][j] = casillas::INDESTRUCTIBLE_WALL;
+					lvl.tablero[i][j] = casillas::INDESTRUCTIBLE_WALL;
 				}
 				else {
-					lvl2.auxrandomblock = (std::rand() % (2));
-					std::cout << lvl2.auxrandomblock << std::endl;
-					if (lvl2.auxrandomblock == 1)
-						lvl2.tablero[i][j] = casillas::DESTRUCTIBLE_WALL;
+					lvl.auxrandomblock = (std::rand() % (2));
+					std::cout << lvl.auxrandomblock << std::endl;
+					if (lvl.auxrandomblock == 1)
+						lvl.tablero[i][j] = casillas::DESTRUCTIBLE_WALL;
 				}
 			}
 		}
-		lvl2.limiteIJ = { 0, 0 };
-		lvl2.limiteWH = { lvl2.casillasAncho, lvl2.casillasAlto };
 	}
+	lvl.limiteIJ = { 0, 0 };
+	lvl.limiteWH = { lvl.casillasAncho, lvl.casillasAlto };
 
 	//Load player 1
 	player1 = Player();
@@ -48,9 +48,9 @@ Play::Play(std::string level) {
 	Renderer::Instance()->GetTextureSize(player1.Player_ID);
 	player1.frameWidth = player1.textWidth / 3;
 	player1.frameHeight = player1.textHeight / 4;
-	player1.tmpPosXY = lvl1.CasillaACoordenada(0, 0);
-	player1.Player_Position.x = player1.tmpPosXY.x;
-	player1.Player_Position.y = player1.tmpPosXY.y;
+	player1.tmpPlayerPosition = lvl.CasillaACoordenada(0, 0);
+	player1.Player_Position.x = player1.tmpPlayerPosition.x;
+	player1.Player_Position.y = player1.tmpPlayerPosition.y;
 	player1.Player_Rect.x = 0;
 	player1.Player_Rect.y = 0;
 	player1.Player_Position.h = LADO_CASILLA;
@@ -69,9 +69,9 @@ Play::Play(std::string level) {
 	Renderer::Instance()->GetTextureSize(player2.Player_ID);
 	player2.frameWidth = player2.textWidth / 3;
 	player2.frameHeight = player2.textHeight / 4;
-	player2.tmpPosXY = lvl1.CasillaACoordenada(lvl1.casillasAncho - 1, 0);
-	player2.Player_Position.x = player2.tmpPosXY.x;
-	player2.Player_Position.y = player2.tmpPosXY.y;
+	player2.tmpPlayerPosition = lvl.CasillaACoordenada(lvl.casillasAncho - 1, 0);
+	player2.Player_Position.x = player2.tmpPlayerPosition.x;
+	player2.Player_Position.y = player2.tmpPlayerPosition.y;
 	player2.Player_Rect.x = 0;
 	player2.Player_Rect.y = 0;
 	player2.Player_Position.h = LADO_CASILLA;
@@ -166,18 +166,75 @@ void Play::EventHandler() {
 	}
 }
 
+
 void Play::Update() {
 	const Uint8 *keyboardstate = SDL_GetKeyboardState(NULL);
-	player1.Update(SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_SPACE);
-	player2.Update(SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_RCTRL);
+	player1Position = player1.Movement(SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_SPACE);
+	player1.tmpPlayerPosition = lvl.CoordenadaACasilla(player1.Player_Position.x, player1.Player_Position.y);
+	std::cout << player1.Player_ID << " se encuentra en la posicion " << player1.tmpPlayerPosition.x << " " << player1.tmpPlayerPosition.y << std::endl;
+
+	if (player1Position == Key::UP && player1.tmpPlayerPosition.y > lvl.limiteIJ.y) {
+		std::cout << "UP" << std::endl;
+		if (lvl.tablero[player1.tmpPlayerPosition.x][player1.tmpPlayerPosition.y - 1] == casillas::EMPTY) {
+			player1.Player_Position.y -= 5;
+		}
+	}
+	else if (player1Position == Key::DOWN && player1.tmpPlayerPosition.y < lvl.limiteWH.y) {
+		std::cout << "DOWN" << std::endl;
+		if (lvl.tablero[player1.tmpPlayerPosition.x][player1.tmpPlayerPosition.y + 1] == casillas::EMPTY) {
+			player1.Player_Position.y += 5;
+		}
+	}
+	else if (player1Position == Key::LEFT && player1.tmpPlayerPosition.x > lvl.limiteIJ.x) {
+		std::cout << "LEFT" << std::endl;
+		if (lvl.tablero[player1.tmpPlayerPosition.x - 1][player1.tmpPlayerPosition.y] == casillas::EMPTY) {
+			player1.Player_Position.x -= 5;
+		}
+	}
+	else if (player1Position == Key::RIGHT && player1.tmpPlayerPosition.x < lvl.limiteWH.x) {
+		std::cout << "RIGHT" << std::endl;
+		if (lvl.tablero[player1.tmpPlayerPosition.x + 1][player1.tmpPlayerPosition.y] == casillas::EMPTY) {
+			player1.Player_Position.x += 5;
+		}
+	}
+
+	player2Position = player2.Movement(SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_RCTRL);
+	player2.tmpPlayerPosition = lvl.CoordenadaACasilla(player2.Player_Position.x, player2.Player_Position.y);
+	std::cout << player2.Player_ID << " se encuentra en la posicion " << player2.tmpPlayerPosition.x << " " << player2.tmpPlayerPosition.y << std::endl;
+
+	if (player2Position == Key::UP && player2.tmpPlayerPosition.y > lvl.limiteIJ.y) {
+		std::cout << "UP" << std::endl;
+		if (lvl.tablero[player2.tmpPlayerPosition.x][player2.tmpPlayerPosition.y - 1] == casillas::EMPTY) {
+			player2.Player_Position.y -= 5;
+		}
+	}
+	else if (player2Position == Key::DOWN && player2.tmpPlayerPosition.y < lvl.limiteWH.y) {
+		std::cout << "DOWN" << std::endl;
+		if (lvl.tablero[player2.tmpPlayerPosition.x][player2.tmpPlayerPosition.y + 1] == casillas::EMPTY) {
+			player2.Player_Position.y += 5;
+		}
+	}
+	else if (player2Position == Key::LEFT && player2.tmpPlayerPosition.x > lvl.limiteIJ.x) {
+		std::cout << "LEFT" << std::endl;
+		if (lvl.tablero[player2.tmpPlayerPosition.x - 1][player2.tmpPlayerPosition.y] == casillas::EMPTY) {
+			player2.Player_Position.x -= 5;
+		}
+	}
+	else if (player2Position == Key::RIGHT && player2.tmpPlayerPosition.x < lvl.limiteWH.x) {
+		std::cout << "RIGHT" << std::endl;
+		if (lvl.tablero[player2.tmpPlayerPosition.x + 1][player2.tmpPlayerPosition.y] == casillas::EMPTY) {
+			player2.Player_Position.x += 5;
+		}
+	}
+
+
 	hud.Update();
 
 }
 
 void Play::Draw() {
 	Renderer::Instance()->PushImage(BG_ID, BG_Rect);
-	lvl1.Draw();
-	lvl2.Draw();
+	lvl.Draw();
 	player1.Draw();
 	player2.Draw();
 	hud.Draw();

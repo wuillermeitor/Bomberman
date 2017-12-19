@@ -1,8 +1,8 @@
 #pragma once
 #include <iostream>
 #include "Renderer.h"
-#include "Level.h"
 #include "Bomb.h"
+
 class Player
 {
 public:
@@ -21,10 +21,9 @@ public:
 	bool Helmet = false;
 	int speed = 5;
 	int RollersBoost = 1.8;
-	Vector2 tmpPosXY;
+	Vector2 tmpPlayerPosition;
 	Vector2 posicionBomba;
 	Bomb bomb;
-	Level lvl;
 	bool up = false;
 	bool up2 = false;
 	bool down = false;
@@ -39,7 +38,7 @@ public:
 	Player();
 	~Player();
 	void EventHandler(SDL_Event evento);
-	void Update(SDL_Scancode UP, SDL_Scancode DOWN, SDL_Scancode LEFT, SDL_Scancode RIGHT, SDL_Scancode DropBomb);
+	Key Movement(SDL_Scancode UP, SDL_Scancode DOWN, SDL_Scancode LEFT, SDL_Scancode RIGHT, SDL_Scancode DropBomb);
 	void Draw();
 	void SpawnBomba(int i, int j, bool up, bool up2, bool down, bool down2, bool left, bool left2, bool right, bool right2);
 
