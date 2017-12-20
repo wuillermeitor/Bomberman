@@ -22,6 +22,8 @@ public:
 	Key player2Position;
 	Level lvl;
 	HUD hud;
+	int lives;
+	int time;
 
 
 

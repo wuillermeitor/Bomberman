@@ -57,6 +57,18 @@
     <ClInclude Include="Button.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="rapidxml.hpp">
+      <Filter>Archivos de recursos</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml_iterators.hpp">
+      <Filter>Archivos de recursos</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml_print.hpp">
+      <Filter>Archivos de recursos</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml_utils.hpp">
+      <Filter>Archivos de recursos</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer.cpp">
@@ -98,5 +110,10 @@
     <ClCompile Include="Button.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="config.xml">
+      <Filter>Archivos de recursos</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

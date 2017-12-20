@@ -1,38 +1,108 @@
 #pragma once
 #include "Play.h"
-
+#include "rapidxml.hpp"
+#include "rapidxml_iterators.hpp"
+#include "rapidxml_print.hpp"
+#include "rapidxml_utils.hpp"
+#include <sstream>
 
 Play::Play(std::string level) {
 	scenestate = SceneState::RUNNING;
 	BG_ID = BACKGROUND;
 	std::string BGPath = "../../res/img/bgGame.jpg";
 	Renderer::Instance()->LoadTexture(BG_ID, BGPath);
+
+	rapidxml::xml_document<> doc;
+	std::ifstream file("../../src/G05_ AA2-2/config.xml");
+	std::stringstream buffer;
+	buffer << file.rdbuf();
+	file.close();
+	std::string content(buffer.str());
+	doc.parse<0>(&content[0]);
+
+	
+
 	if (level == "PLAY1") {
+		std::cout << "He entrado en el nivel 1" << std::endl;
+		std::cout << "Nombre de la raiz:" << doc.first_node()->name() << std::endl;
+
+		rapidxml::xml_node<> *pRoot = doc.first_node();
+
+		rapidxml::xml_node<> *pLevel = pRoot->first_node("Level");
+
+		//while (atoi(pLevel->first_attribute("id")->value()) != static_cast<int>(_set)) { //search Level
+
+		//pLevel = pLevel->next_sibling("Level");
+		
+		time = atoi(pLevel->first_attribute("time")->value());		//Segons que durara com a maxim la partida
+
+		std::cout << time << std::endl;
+		lives = atoi(pLevel->first_attribute("lives")->value());	//vides dels jugadors
+
+		std::cout << lives << std::endl;
+
+		for (rapidxml::xml_node<> *pWall = pLevel->first_node("Destructible")->first_node("Wall"); pWall; pWall = pWall->next_sibling("Wall")) {
+
+			int i = atoi(pWall->first_attribute("i")->value());
+			int j = atoi(pWall->first_attribute("j")->value());
+
+			lvl.tablero[i][j] = casillas::DESTRUCTIBLE_WALL;
+			std::cout << "Creo bloque destruible en" << i << " " << j << std::endl;
+		}
+
+
+		for (rapidxml::xml_node<> *pWall = pLevel->first_node("Fixed")->first_node("Wall"); pWall; pWall = pWall->next_sibling("Wall")) {
+
+			int i = atoi(pWall->first_attribute("i")->value());
+			int j = atoi(pWall->first_attribute("j")->value());
+
+			lvl.tablero[i][j] = casillas::INDESTRUCTIBLE_WALL;
+			std::cout << "Creo bloque indestructible en" << i << " " << j << std::endl;
+		}
 		lvl = Level();
 	}
 	else if (level == "PLAY2") {
+		std::cout << "Nombre de la raiz:" << doc.first_node()->name() << std::endl;
+
+		rapidxml::xml_node<> *pRoot = doc.first_node();
+
+		rapidxml::xml_node<> *pLevel = pRoot->first_node("Level");
+
+		//while (atoi(pLevel->first_attribute("id")->value()) != static_cast<int>(_set)) { //search Level
+
+		pLevel = pLevel->next_sibling("Level");
+
+
+
+		time = atoi(pLevel->first_attribute("time")->value());		//Segons que durara com a maxim la partida
+		std::cout << time << std::endl;
+		lives = atoi(pLevel->first_attribute("lives")->value());	//vides dels jugadors
+		std::cout << lives << std::endl;
+
+		
 		lvl = Level();
 		std::cout << "He entrado en el nivel 2" << std::endl;
 		Renderer::Instance()->LoadTexture(BACKGROUND, "../../res/img/bgGame.jpg");
 		for (int i = 0; i < lvl.casillasAncho; i++) {
 			lvl.tablero[i] = new casillas[lvl.casillasAlto];
 			for (int j = 0; j < lvl.casillasAlto; j++) {
-				if ((j == 0) && (i == 0) || (j == 1) && (i == 0) || (j == 0) && (i == 1) || (j == 12) && (i == 10) || (j == 11) && (i == 10) || (j == 12) && (i == 9)) {
-					lvl.tablero[i][j] = casillas::EMPTY;
-					//std::cout << "Casillas vacias" << std::endl;
+				for (rapidxml::xml_node<> *pWall = pLevel->first_node("Destructible")->first_node("Wall"); pWall; pWall = pWall->next_sibling("Wall")) {
+
+					int i = atoi(pWall->first_attribute("i")->value());
+					int j = atoi(pWall->first_attribute("j")->value());
+
+					lvl.tablero[i][j] = casillas::DESTRUCTIBLE_WALL;
+					std::cout << "Creo bloque destruible en" << i << " " << j << std::endl;
 				}
-				else if (((j == 0) && (i == 10) || (j == 0) && (i == 9) || (j == 1) && (i == 10) || (j == 11) && (i == 0) || (j == 12) && (i == 0) || (j == 12) && (i == 1))) {
-					lvl.tablero[i][j] = casillas::EMPTY;
-					//std::cout << "Casillas vacias" << std::endl;
-				}
-				else if ((i == 1 || i == 3 || i == 5 || i == 7 || i == 9) && (j == 1 || j == 3 || j == 5 || j == 7 || j == 9 || j == 11)) {
+
+
+				for (rapidxml::xml_node<> *pWall = pLevel->first_node("Fixed")->first_node("Wall"); pWall; pWall = pWall->next_sibling("Wall")) {
+
+					int i = atoi(pWall->first_attribute("i")->value());
+					int j = atoi(pWall->first_attribute("j")->value());
+
 					lvl.tablero[i][j] = casillas::INDESTRUCTIBLE_WALL;
-				}
-				else {
-					lvl.auxrandomblock = (std::rand() % (2));
-					std::cout << lvl.auxrandomblock << std::endl;
-					if (lvl.auxrandomblock == 1)
-						lvl.tablero[i][j] = casillas::DESTRUCTIBLE_WALL;
+					std::cout << "Creo bloque indestructible en" << i << " " << j << std::endl;
 				}
 			}
 		}
