@@ -170,30 +170,34 @@ void Play::EventHandler() {
 void Play::Update() {
 	const Uint8 *keyboardstate = SDL_GetKeyboardState(NULL);
 	player1Position = player1.Movement(SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_SPACE);
-	player1.tmpPlayerPosition = lvl.CoordenadaACasilla(player1.Player_Position.x, player1.Player_Position.y);
+	player1.tmpPlayerPosition = lvl.CoordenadaACasilla(player1.Player_Position.x + LADO_CASILLA / 2, player1.Player_Position.y);
 	std::cout << player1.Player_ID << " se encuentra en la posicion " << player1.tmpPlayerPosition.x << " " << player1.tmpPlayerPosition.y << std::endl;
 
 	if (player1Position == Key::UP && player1.tmpPlayerPosition.y > lvl.limiteIJ.y) {
 		std::cout << "UP" << std::endl;
 		if (lvl.tablero[player1.tmpPlayerPosition.x][player1.tmpPlayerPosition.y - 1] == casillas::EMPTY) {
+			player1.Player_Rect.y = 0;
 			player1.Player_Position.y -= 5;
 		}
 	}
 	else if (player1Position == Key::DOWN && player1.tmpPlayerPosition.y < lvl.limiteWH.y) {
 		std::cout << "DOWN" << std::endl;
 		if (lvl.tablero[player1.tmpPlayerPosition.x][player1.tmpPlayerPosition.y + 1] == casillas::EMPTY) {
+			player1.Player_Rect.y = player1.Player_Rect.h * 2;
 			player1.Player_Position.y += 5;
 		}
 	}
 	else if (player1Position == Key::LEFT && player1.tmpPlayerPosition.x > lvl.limiteIJ.x) {
 		std::cout << "LEFT" << std::endl;
 		if (lvl.tablero[player1.tmpPlayerPosition.x - 1][player1.tmpPlayerPosition.y] == casillas::EMPTY) {
+			player1.Player_Rect.y = player1.Player_Rect.h;
 			player1.Player_Position.x -= 5;
 		}
 	}
 	else if (player1Position == Key::RIGHT && player1.tmpPlayerPosition.x < lvl.limiteWH.x) {
 		std::cout << "RIGHT" << std::endl;
 		if (lvl.tablero[player1.tmpPlayerPosition.x + 1][player1.tmpPlayerPosition.y] == casillas::EMPTY) {
+			player1.Player_Rect.y = player1.Player_Rect.h * 3;
 			player1.Player_Position.x += 5;
 		}
 	}
@@ -205,24 +209,28 @@ void Play::Update() {
 	if (player2Position == Key::UP && player2.tmpPlayerPosition.y > lvl.limiteIJ.y) {
 		std::cout << "UP" << std::endl;
 		if (lvl.tablero[player2.tmpPlayerPosition.x][player2.tmpPlayerPosition.y - 1] == casillas::EMPTY) {
+			player2.Player_Rect.y = 0;
 			player2.Player_Position.y -= 5;
 		}
 	}
 	else if (player2Position == Key::DOWN && player2.tmpPlayerPosition.y < lvl.limiteWH.y) {
 		std::cout << "DOWN" << std::endl;
 		if (lvl.tablero[player2.tmpPlayerPosition.x][player2.tmpPlayerPosition.y + 1] == casillas::EMPTY) {
+			player2.Player_Rect.y = player2.Player_Rect.h * 2;
 			player2.Player_Position.y += 5;
 		}
 	}
 	else if (player2Position == Key::LEFT && player2.tmpPlayerPosition.x > lvl.limiteIJ.x) {
 		std::cout << "LEFT" << std::endl;
 		if (lvl.tablero[player2.tmpPlayerPosition.x - 1][player2.tmpPlayerPosition.y] == casillas::EMPTY) {
+			player2.Player_Rect.y = player2.Player_Rect.h;
 			player2.Player_Position.x -= 5;
 		}
 	}
 	else if (player2Position == Key::RIGHT && player2.tmpPlayerPosition.x < lvl.limiteWH.x) {
 		std::cout << "RIGHT" << std::endl;
 		if (lvl.tablero[player2.tmpPlayerPosition.x + 1][player2.tmpPlayerPosition.y] == casillas::EMPTY) {
+			player2.Player_Rect.y = player2.Player_Rect.h * 3;
 			player2.Player_Position.x += 5;
 		}
 	}

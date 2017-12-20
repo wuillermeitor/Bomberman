@@ -18,7 +18,8 @@ Menu::Menu()
 	}
 	Mix_Music *soundtrack{ Mix_LoadMUS("../../res/au/menu.mp3") };
 	if (!soundtrack) throw "Unable to load the Mix_Music soundtrack";
-	Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+	//Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+	Mix_VolumeMusic(0);
 	Mix_PlayMusic(soundtrack, -1);
 	audio = true;
 
