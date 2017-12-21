@@ -23,7 +23,8 @@ public:
 	int RollersBoost = 1.8;
 	Vector2 PlayerPositionXY;
 	Vector2 PlayerPositionWH;
-	Vector2 BombPosition;
+	Vector2 BombPositionXY;
+	Vector2 BombPositionIJ;
 	Bomb bomb;
 	bool up = false;
 	bool up2 = false;

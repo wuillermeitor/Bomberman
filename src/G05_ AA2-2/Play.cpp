@@ -250,7 +250,6 @@ void Play::Update() {
 	player1.PlayerPositionWH = lvl.CoordenadaACasilla(player1.Player_Position.x + LADO_CASILLA - 2, player1.Player_Position.y - ((LADO_CASILLA + 17) / 2) + LADO_CASILLA - 2);
 	//std::cout << player1.Player_ID << " se encuentra en la posicion x y " << player1.PlayerPositionXY.x << " " << player1.PlayerPositionXY.y << std::endl;
 	//std::cout << player1.Player_ID << " se encuentra en la posicion w h " << player1.PlayerPositionWH.x << " " << player1.PlayerPositionWH.y << std::endl;
-	std::cout << static_cast<int>(player1KeyMove) << std::endl;
 	if (player1KeyMove == Key::UP && player1.PlayerPositionXY.y >= lvl.limiteIJ.y && player1.Player_Position.x >= LADO_CASILLA) {
 		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] == casillas::EMPTY) {
 			player1.Player_Rect.y = 0;
@@ -277,9 +276,86 @@ void Play::Update() {
 	}
 	if (player1KeyMove == Key::BOMB) {
 		std::cout << "drop the bomb!" << std::endl;
-		player1.BombPosition = player1.PlayerPositionXY;
-		player1.BombPosition = lvl.CasillaACoordenada(player1.BombPosition.x, player1.BombPosition.y);
+		player1.BombPositionIJ = player1.PlayerPositionXY;
+		player1.BombPositionXY = lvl.CasillaACoordenada(player1.BombPositionIJ.x, player1.BombPositionIJ.y);
 		player1.dropbomb = true;
+
+		//ESTO DEBE COMPROBAR SI EN LA POSICIÓN DE LA ONDA EXPANSIVA HAY UN LADRILLO
+		if (player1.bomb.timeDown <= 1) {
+			player1.BombPositionIJ = lvl.CoordenadaACasilla(player1.BombPositionXY.x, player1.BombPositionXY.y);
+			std::cout << player1.BombPositionIJ.x << " " << player1.BombPositionIJ.y << std::endl;
+			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 1] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 1] == casillas::DESTRUCTIBLE_WALL)
+			{
+				player1.down = true;
+			}
+			else
+			{
+				player1.down = false;
+			}
+
+			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 2] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 2] == casillas::DESTRUCTIBLE_WALL)
+			{
+				player1.down2 = true;
+			}
+			else
+			{
+				player1.down2 = false;
+			}
+
+			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 1] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 1] == casillas::DESTRUCTIBLE_WALL)
+			{
+				player1.up = true;
+			}
+			else
+			{
+				player1.up = false;
+			}
+
+			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 2] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 2] == casillas::DESTRUCTIBLE_WALL)
+			{
+				player1.up2 = true;
+			}
+			else
+			{
+				player1.up2 = false;
+			}
+
+			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x + 1] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x + 1] == casillas::DESTRUCTIBLE_WALL)
+			{
+				player1.right = true;
+			}
+			else
+			{
+				player1.right = false;
+			}
+
+			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x + 2] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x + 2] == casillas::DESTRUCTIBLE_WALL)
+			{
+				player1.right2 = true;
+			}
+			else
+			{
+				player1.right2 = false;
+			}
+
+			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x - 1] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x - 1] == casillas::DESTRUCTIBLE_WALL)
+			{
+				player1.left = true;
+			}
+			else
+			{
+				player1.left = false;
+			}
+
+			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x - 2] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x - 2] == casillas::DESTRUCTIBLE_WALL)
+			{
+				player1.left2 = true;
+			}
+			else
+			{
+				player1.left2 = false;
+			}
+		}
 	}
 
 	if (player1.PlayerPositionXY.y <= -1) {

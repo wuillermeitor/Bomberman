@@ -100,48 +100,8 @@ Key Player::Movement(SDL_Scancode UP, SDL_Scancode DOWN, SDL_Scancode LEFT, SDL_
 }
 void Player::Draw() {
 	if (dropbomb) {
-		//ESTO DEBERÍA COMPROBAR SI EN LA POSICIÓN DE LA ONDA EXPANSIVA HAY UN LADRILLO PERO NO VA.
-		//if (lvl.tablero[posicionBomba.x][posicionBomba.y + 1] == casillas::INDESTRUCTIBLE_WALL && lvl.tablero[posicionBomba.x][posicionBomba.y + 1] == casillas::DESTRUCTIBLE_WALL)
-		//{ down = true; }
-		//else 
-		//{ down = false; }
-
-		//if (lvl.tablero[posicionBomba.x][posicionBomba.y + 2] == casillas::INDESTRUCTIBLE_WALL && lvl.tablero[posicionBomba.x][posicionBomba.y + 2] == casillas::DESTRUCTIBLE_WALL)
-		//{ down2 = true; }
-		//else 
-		//{ down2 = false; }
-
-		//if (lvl.tablero[posicionBomba.x][posicionBomba.y - 1] == casillas::INDESTRUCTIBLE_WALL && lvl.tablero[posicionBomba.x][posicionBomba.y - 1] == casillas::DESTRUCTIBLE_WALL)
-		//{ up = true; }
-		//else 
-		//{ up = false; }
-
-		//if (lvl.tablero[posicionBomba.x][posicionBomba.y - 2] == casillas::INDESTRUCTIBLE_WALL && lvl.tablero[posicionBomba.x][posicionBomba.y - 2] == casillas::DESTRUCTIBLE_WALL)
-		//{ up2 = true; }
-		//else 
-		//{ up2 = false; }
-
-		//if (lvl.tablero[posicionBomba.x][posicionBomba.x + 1] == casillas::INDESTRUCTIBLE_WALL && lvl.tablero[posicionBomba.x][posicionBomba.x + 1] == casillas::DESTRUCTIBLE_WALL)
-		//{ right = true; }
-		//else 
-		//{ right = false; }
-
-		//if (lvl.tablero[posicionBomba.x][posicionBomba.x + 2] == casillas::INDESTRUCTIBLE_WALL && lvl.tablero[posicionBomba.x][posicionBomba.x + 2] == casillas::DESTRUCTIBLE_WALL)
-		//{ right2 = true; }
-		//else 
-		//{ right2 = false; }
-
-		//if (lvl.tablero[posicionBomba.x][posicionBomba.x - 1] == casillas::INDESTRUCTIBLE_WALL && lvl.tablero[posicionBomba.x][posicionBomba.x - 1] == casillas::DESTRUCTIBLE_WALL)
-		//{ left = true; }
-		//else 
-		//{ left = false; }
-
-		//if (lvl.tablero[posicionBomba.x][posicionBomba.x - 2] == casillas::INDESTRUCTIBLE_WALL && lvl.tablero[posicionBomba.x][posicionBomba.x - 2] == casillas::DESTRUCTIBLE_WALL)
-		//{ left2 = true; }
-		//else 
-		//{ left2 = true; }
-		Player::SpawnBomba(BombPosition.x, BombPosition.y, up, up2, down, down2, left, left2, right, right2);
-		std::cout << BombPosition.x << " " << BombPosition.y << std::endl;
+		Player::SpawnBomba(BombPositionXY.x, BombPositionXY.y, up, up2, down, down2, left, left2, right, right2);
+		//std::cout << BombPositionXY.x << " " << BombPositionXY.y << std::endl;
 
 	}
 	if (bomb.explosion) {
