@@ -7,11 +7,11 @@ Player::Player() {
 	Player_ID = PLAYER1_SPRITE;
 	Renderer::Instance()->LoadTexture(Player_ID, PlayerPath);
 	Renderer::Instance()->GetTextureSize(Player_ID);
-	tmpPlayerPosition = { 0, 0 };
+	PlayerPositionXY = { 0, 0 };
 	frameWidth = textWidth / 3;
 	frameHeight = textHeight / 4;
-	Player_Position.x = tmpPlayerPosition.x;
-	Player_Position.y = tmpPlayerPosition.y;
+	Player_Position.x = PlayerPositionXY.x;
+	Player_Position.y = PlayerPositionXY.y;
 	Player_Rect.x = 0;
 	Player_Rect.y = 0;
 	Player_Position.h = LADO_CASILLA;

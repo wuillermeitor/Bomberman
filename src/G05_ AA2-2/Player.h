@@ -21,7 +21,8 @@ public:
 	bool Helmet = false;
 	int speed = 5;
 	int RollersBoost = 1.8;
-	Vector2 tmpPlayerPosition;
+	Vector2 PlayerPositionXY;
+	Vector2 PlayerPositionWH;
 	Vector2 posicionBomba;
 	Bomb bomb;
 	bool up = false;

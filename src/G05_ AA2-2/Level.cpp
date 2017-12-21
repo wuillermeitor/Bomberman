@@ -43,12 +43,7 @@ Level::Level()
 	for (int i = 0; i <= casillasAncho; i++) {
 		tablero[i] = new casillas[casillasAlto];
 		for (int j = 0; j <= casillasAlto; j++) {
-			if ((i == 1 || i == 3 || i == 5 || i == 7 || i == 9 || i == 11) && (j == 1 || j == 3 || j == 5 || j == 7 || j == 9)) {
-				tablero[i][j] = casillas::INDESTRUCTIBLE_WALL;
-			}
-			else {
-				tablero[i][j] = casillas::EMPTY;
-			}
+			tablero[i][j] = casillas::EMPTY;
 		}
 	}
 	limiteIJ = { 0, 0 };

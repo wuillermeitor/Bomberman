@@ -1,44 +1,118 @@
 #pragma once
 #include "Play.h"
-
+#include "../../dep/inc/xml/rapidxml.hpp"
+#include "../../dep/inc/xml/rapidxml_iterators.hpp"
+#include "../../dep/inc/xml/rapidxml_print.hpp"
+#include "../../dep/inc/xml/rapidxml_utils.hpp"
+#include <sstream>
 
 Play::Play(std::string level) {
 	scenestate = SceneState::RUNNING;
 	BG_ID = BACKGROUND;
 	std::string BGPath = "../../res/img/bgGame.jpg";
 	Renderer::Instance()->LoadTexture(BG_ID, BGPath);
+
+	rapidxml::xml_document<> doc;
+	std::ifstream file("../../res/files/config.xml");
+	std::stringstream buffer;
+	buffer << file.rdbuf();
+	file.close();
+	std::string content(buffer.str());
+	doc.parse<0>(&content[0]);
+
+
+
 	if (level == "PLAY1") {
 		lvl = Level();
+		std::cout << "He entrado en el nivel 1" << std::endl;
+		std::cout << "Nombre de la raiz:" << doc.first_node()->name() << std::endl;
+
+		rapidxml::xml_node<> *pRoot = doc.first_node();
+
+		rapidxml::xml_node<> *pLevel = pRoot->first_node("Level");
+
+		time = atoi(pLevel->first_attribute("time")->value());		//Segons que durara com a maxim la partida
+
+		std::cout << time << std::endl;
+		lives = atoi(pLevel->first_attribute("lives")->value());	//vides dels jugadors
+
+		std::cout << lives << std::endl;
+
+
+		/*	for (int i = 0; i <= lvl.casillasAncho; i++) {
+		for (int j = 0; j <= lvl.casillasAlto; j++) {*/
+		for (rapidxml::xml_node<> *pWall = pLevel->first_node("Destructible")->first_node("Wall"); pWall; pWall = pWall->next_sibling("Wall")) {
+
+			int i = atoi(pWall->first_attribute("j")->value());
+			int j = atoi(pWall->first_attribute("i")->value());
+
+			lvl.tablero[i][j] = casillas::DESTRUCTIBLE_WALL;
+			std::cout << "Creo bloque destruible en" << i << " " << j << std::endl;
+
+		}
+
+
+		for (rapidxml::xml_node<> *pWall = pLevel->first_node("Fixed")->first_node("Wall"); pWall; pWall = pWall->next_sibling("Wall")) {
+
+			int i = atoi(pWall->first_attribute("j")->value());
+			int j = atoi(pWall->first_attribute("i")->value());
+
+			lvl.tablero[i][j] = casillas::INDESTRUCTIBLE_WALL;
+			std::cout << "Creo bloque indestructible en" << i << " " << j << std::endl;
+
+		}
+
+		lvl.limiteIJ = { 0, 0 };
+		lvl.limiteWH = { lvl.casillasAncho, lvl.casillasAlto };
+		//	}
+		//}
 	}
+
+
+
 	else if (level == "PLAY2") {
+		std::cout << "Nombre de la raiz:" << doc.first_node()->name() << std::endl;
+
+		rapidxml::xml_node<> *pRoot = doc.first_node();
+
+		rapidxml::xml_node<> *pLevel = pRoot->first_node("Level");
+
+		pLevel = pLevel->next_sibling("Level");
+
+
+
+		time = atoi(pLevel->first_attribute("time")->value());		//Segons que durara com a maxim la partida
+		std::cout << time << std::endl;
+		lives = atoi(pLevel->first_attribute("lives")->value());	//vides dels jugadors
+		std::cout << lives << std::endl;
+
+
 		lvl = Level();
 		std::cout << "He entrado en el nivel 2" << std::endl;
 		Renderer::Instance()->LoadTexture(BACKGROUND, "../../res/img/bgGame.jpg");
-		for (int i = 0; i < lvl.casillasAncho; i++) {
-			lvl.tablero[i] = new casillas[lvl.casillasAlto];
-			for (int j = 0; j < lvl.casillasAlto; j++) {
-				if ((j == 0) && (i == 0) || (j == 1) && (i == 0) || (j == 0) && (i == 1) || (j == 12) && (i == 10) || (j == 11) && (i == 10) || (j == 12) && (i == 9)) {
-					lvl.tablero[i][j] = casillas::EMPTY;
-					//std::cout << "Casillas vacias" << std::endl;
-				}
-				else if (((j == 0) && (i == 10) || (j == 0) && (i == 9) || (j == 1) && (i == 10) || (j == 11) && (i == 0) || (j == 12) && (i == 0) || (j == 12) && (i == 1))) {
-					lvl.tablero[i][j] = casillas::EMPTY;
-					//std::cout << "Casillas vacias" << std::endl;
-				}
-				else if ((i == 1 || i == 3 || i == 5 || i == 7 || i == 9) && (j == 1 || j == 3 || j == 5 || j == 7 || j == 9 || j == 11)) {
-					lvl.tablero[i][j] = casillas::INDESTRUCTIBLE_WALL;
-				}
-				else {
-					lvl.auxrandomblock = (std::rand() % (2));
-					std::cout << lvl.auxrandomblock << std::endl;
-					if (lvl.auxrandomblock == 1)
-						lvl.tablero[i][j] = casillas::DESTRUCTIBLE_WALL;
-				}
-			}
+		for (rapidxml::xml_node<> *pWall = pLevel->first_node("Destructible")->first_node("Wall"); pWall; pWall = pWall->next_sibling("Wall")) {
+
+			int i = atoi(pWall->first_attribute("j")->value());
+			int j = atoi(pWall->first_attribute("i")->value());
+
+			lvl.tablero[i][j] = casillas::DESTRUCTIBLE_WALL;
+			std::cout << "Creo bloque destruible en" << i << " " << j << std::endl;
 		}
+
+
+		for (rapidxml::xml_node<> *pWall = pLevel->first_node("Fixed")->first_node("Wall"); pWall; pWall = pWall->next_sibling("Wall")) {
+
+			int i = atoi(pWall->first_attribute("j")->value());
+			int j = atoi(pWall->first_attribute("i")->value());
+
+			lvl.tablero[i][j] = casillas::INDESTRUCTIBLE_WALL;
+			std::cout << "Creo bloque indestructible en" << i << " " << j << std::endl;
+		}
+		lvl.limiteIJ = { 0, 0 };
+		lvl.limiteWH = { lvl.casillasAncho, lvl.casillasAlto };
+
 	}
-	lvl.limiteIJ = { 0, 0 };
-	lvl.limiteWH = { lvl.casillasAncho, lvl.casillasAlto };
+
 
 	//Load player 1
 	player1 = Player();
@@ -48,9 +122,11 @@ Play::Play(std::string level) {
 	Renderer::Instance()->GetTextureSize(player1.Player_ID);
 	player1.frameWidth = player1.textWidth / 3;
 	player1.frameHeight = player1.textHeight / 4;
-	player1.tmpPlayerPosition = lvl.CasillaACoordenada(0, 0);
-	player1.Player_Position.x = player1.tmpPlayerPosition.x;
-	player1.Player_Position.y = player1.tmpPlayerPosition.y;
+	player1.PlayerPositionXY = lvl.CasillaACoordenada(0, 0);
+	player1.PlayerPositionWH.x = player1.PlayerPositionXY.x + LADO_CASILLA - 2;
+	player1.PlayerPositionWH.y = player1.PlayerPositionXY.y + LADO_CASILLA - 2;
+	player1.Player_Position.x = player1.PlayerPositionXY.x;
+	player1.Player_Position.y = player1.PlayerPositionXY.y;
 	player1.Player_Rect.x = 0;
 	player1.Player_Rect.y = 0;
 	player1.Player_Position.h = LADO_CASILLA;
@@ -69,9 +145,9 @@ Play::Play(std::string level) {
 	Renderer::Instance()->GetTextureSize(player2.Player_ID);
 	player2.frameWidth = player2.textWidth / 3;
 	player2.frameHeight = player2.textHeight / 4;
-	player2.tmpPlayerPosition = lvl.CasillaACoordenada(lvl.casillasAncho - 1, 0);
-	player2.Player_Position.x = player2.tmpPlayerPosition.x;
-	player2.Player_Position.y = player2.tmpPlayerPosition.y;
+	player2.PlayerPositionXY = lvl.CasillaACoordenada(lvl.casillasAncho - 1, 0);
+	player2.Player_Position.x = player2.PlayerPositionXY.x;
+	player2.Player_Position.y = player2.PlayerPositionXY.y;
 	player2.Player_Rect.x = 0;
 	player2.Player_Rect.y = 0;
 	player2.Player_Position.h = LADO_CASILLA;
@@ -170,70 +246,51 @@ void Play::EventHandler() {
 void Play::Update() {
 	const Uint8 *keyboardstate = SDL_GetKeyboardState(NULL);
 	player1Position = player1.Movement(SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_SPACE);
-	player1.tmpPlayerPosition = lvl.CoordenadaACasilla(player1.Player_Position.x + LADO_CASILLA / 2, player1.Player_Position.y);
-	std::cout << player1.Player_ID << " se encuentra en la posicion " << player1.tmpPlayerPosition.x << " " << player1.tmpPlayerPosition.y << std::endl;
+	player1.PlayerPositionXY = lvl.CoordenadaACasilla(player1.Player_Position.x, player1.Player_Position.y - (LADO_CASILLA + 17) / 2);
+	player1.PlayerPositionWH = lvl.CoordenadaACasilla(player1.Player_Position.x + LADO_CASILLA - 2, player1.Player_Position.y - ((LADO_CASILLA + 17) / 2) + LADO_CASILLA - 2);
+	std::cout << player1.Player_ID << " se encuentra en la posicion x y " << player1.PlayerPositionXY.x << " " << player1.PlayerPositionXY.y << std::endl;
+	std::cout << player1.Player_ID << " se encuentra en la posicion w h " << player1.PlayerPositionWH.x << " " << player1.PlayerPositionWH.y << std::endl;
 
-	if (player1Position == Key::UP && player1.tmpPlayerPosition.y > lvl.limiteIJ.y) {
+	if (player1Position == Key::UP && player1.PlayerPositionXY.y >= lvl.limiteIJ.y && player1.Player_Position.x >= LADO_CASILLA) {
 		std::cout << "UP" << std::endl;
-		if (lvl.tablero[player1.tmpPlayerPosition.x][player1.tmpPlayerPosition.y - 1] == casillas::EMPTY) {
+		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] == casillas::EMPTY) {
 			player1.Player_Rect.y = 0;
-			player1.Player_Position.y -= 5;
+			player1.Player_Position.y--;
 		}
 	}
-	else if (player1Position == Key::DOWN && player1.tmpPlayerPosition.y < lvl.limiteWH.y) {
+	else if (player1Position == Key::DOWN && player1.PlayerPositionXY.y + 1 < lvl.limiteWH.y && player1.Player_Position.x >= LADO_CASILLA) {
 		std::cout << "DOWN" << std::endl;
-		if (lvl.tablero[player1.tmpPlayerPosition.x][player1.tmpPlayerPosition.y + 1] == casillas::EMPTY) {
+		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y + 1] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y + 1] == casillas::EMPTY) {
 			player1.Player_Rect.y = player1.Player_Rect.h * 2;
-			player1.Player_Position.y += 5;
+			player1.Player_Position.y++;
 		}
 	}
-	else if (player1Position == Key::LEFT && player1.tmpPlayerPosition.x > lvl.limiteIJ.x) {
+	else if (player1Position == Key::LEFT && player1.PlayerPositionXY.x >= lvl.limiteIJ.x && player1.Player_Position.y >= LADO_CASILLA + HUD_HEIGHT) {
 		std::cout << "LEFT" << std::endl;
-		if (lvl.tablero[player1.tmpPlayerPosition.x - 1][player1.tmpPlayerPosition.y] == casillas::EMPTY) {
+		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] == casillas::EMPTY) {
 			player1.Player_Rect.y = player1.Player_Rect.h;
-			player1.Player_Position.x -= 5;
+			player1.Player_Position.x--;
 		}
 	}
-	else if (player1Position == Key::RIGHT && player1.tmpPlayerPosition.x < lvl.limiteWH.x) {
+	else if (player1Position == Key::RIGHT && player1.PlayerPositionXY.x + 1 < lvl.limiteWH.x && player1.Player_Position.y >= LADO_CASILLA + HUD_HEIGHT) {
 		std::cout << "RIGHT" << std::endl;
-		if (lvl.tablero[player1.tmpPlayerPosition.x + 1][player1.tmpPlayerPosition.y] == casillas::EMPTY) {
+		if (lvl.tablero[player1.PlayerPositionXY.x + 1][player1.PlayerPositionXY.y] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x + 1][player1.PlayerPositionWH.y] == casillas::EMPTY) {
 			player1.Player_Rect.y = player1.Player_Rect.h * 3;
-			player1.Player_Position.x += 5;
+			player1.Player_Position.x++;
 		}
+	}
+
+	if (player1.PlayerPositionXY.y <= -1) {
+		player1.Player_Position.y++;
+	}
+	if (player1.PlayerPositionXY.x <= -1) {
+		player1.Player_Position.x++;
 	}
 
 	player2Position = player2.Movement(SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_RCTRL);
-	player2.tmpPlayerPosition = lvl.CoordenadaACasilla(player2.Player_Position.x, player2.Player_Position.y);
-	std::cout << player2.Player_ID << " se encuentra en la posicion " << player2.tmpPlayerPosition.x << " " << player2.tmpPlayerPosition.y << std::endl;
+	player2.PlayerPositionXY = lvl.CoordenadaACasilla(player2.Player_Position.x, player2.Player_Position.y);
+	std::cout << player2.Player_ID << " se encuentra en la posicion " << player2.PlayerPositionXY.x << " " << player2.PlayerPositionXY.y << std::endl;
 
-	if (player2Position == Key::UP && player2.tmpPlayerPosition.y > lvl.limiteIJ.y) {
-		std::cout << "UP" << std::endl;
-		if (lvl.tablero[player2.tmpPlayerPosition.x][player2.tmpPlayerPosition.y - 1] == casillas::EMPTY) {
-			player2.Player_Rect.y = 0;
-			player2.Player_Position.y -= 5;
-		}
-	}
-	else if (player2Position == Key::DOWN && player2.tmpPlayerPosition.y < lvl.limiteWH.y) {
-		std::cout << "DOWN" << std::endl;
-		if (lvl.tablero[player2.tmpPlayerPosition.x][player2.tmpPlayerPosition.y + 1] == casillas::EMPTY) {
-			player2.Player_Rect.y = player2.Player_Rect.h * 2;
-			player2.Player_Position.y += 5;
-		}
-	}
-	else if (player2Position == Key::LEFT && player2.tmpPlayerPosition.x > lvl.limiteIJ.x) {
-		std::cout << "LEFT" << std::endl;
-		if (lvl.tablero[player2.tmpPlayerPosition.x - 1][player2.tmpPlayerPosition.y] == casillas::EMPTY) {
-			player2.Player_Rect.y = player2.Player_Rect.h;
-			player2.Player_Position.x -= 5;
-		}
-	}
-	else if (player2Position == Key::RIGHT && player2.tmpPlayerPosition.x < lvl.limiteWH.x) {
-		std::cout << "RIGHT" << std::endl;
-		if (lvl.tablero[player2.tmpPlayerPosition.x + 1][player2.tmpPlayerPosition.y] == casillas::EMPTY) {
-			player2.Player_Rect.y = player2.Player_Rect.h * 3;
-			player2.Player_Position.x += 5;
-		}
-	}
 
 
 	hud.Update();

@@ -28,7 +28,7 @@ enum class casillas : char {
 	DESTRUCTIBLE_WALL = 'D', INDESTRUCTIBLE_WALL = 'I', EMPTY = 'E', PLAYER = 'P', BOMB = 'B', EXPLOSION = 'X', ROLLERS = 'R', HELMET = 'H'
 };
 
-enum class Key { UP, DOWN, LEFT, RIGHT, NONE };
+enum class Key { UP, DOWN, LEFT, RIGHT, BOMB, NONE };
 
 enum class GameState { PLAY1, PLAY2, MENU, RANKING, EXIT };
 
