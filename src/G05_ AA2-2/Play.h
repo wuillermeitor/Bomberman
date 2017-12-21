@@ -18,8 +18,8 @@ public:
 	SDL_Rect BG_Rect{ 0,0,SCREEN_WIDTH, SCREEN_HEIGHT };
 	Player player1;
 	Player player2;
-	Key player1Position;
-	Key player2Position;
+	Key player1KeyMove;
+	Key player2KeyMove;
 	Level lvl;
 	HUD hud;
 	int lives;

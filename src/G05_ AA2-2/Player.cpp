@@ -36,8 +36,8 @@ void Player::EventHandler(SDL_Event evento) {
 	}
 }
 
-Key Player::Movement(SDL_Scancode UP, SDL_Scancode DOWN, SDL_Scancode LEFT, SDL_Scancode RIGHT, SDL_Scancode DropBomb) {
-	std::cout << Player_Position.x << " " << Player_Position.y << std::endl;
+Key Player::Movement(SDL_Scancode UP, SDL_Scancode DOWN, SDL_Scancode LEFT, SDL_Scancode RIGHT, SDL_Scancode DROPBOMB) {
+	//std::cout << Player_Position.x << " " << Player_Position.y << std::endl;
 	frameTime++;
 	if (FPS / frameTime <= 5) {
 		frameTime = 0;
@@ -53,6 +53,17 @@ Key Player::Movement(SDL_Scancode UP, SDL_Scancode DOWN, SDL_Scancode LEFT, SDL_
 	//Movimiento
 	const Uint8 *keyboardstate = SDL_GetKeyboardState(NULL);
 	//EL BOOSTEO DE LOS PATINES ES FUNCIONAL PERO COMO NO PODEMOS ROMPER LADRILLOS NO PODEMOS CARGAR POWER-UPS NO SE ACTIVAN.
+
+	if (!dropbomb) {
+		if (keyboardstate[DROPBOMB]) {
+			bomb.lastTime = clock();
+			bomb.timeDown = 3.;
+			bomb.deltaTime = 0;
+			std::cout << "drop bomb" << std::endl;
+			return Key::BOMB;
+		}
+	}
+
 	if (keyboardstate[UP]) {
 		return Key::UP;
 	}
@@ -68,18 +79,7 @@ Key Player::Movement(SDL_Scancode UP, SDL_Scancode DOWN, SDL_Scancode LEFT, SDL_
 	else {
 		return Key::NONE;
 	}
-	//if (!dropbomb) {
-	//	if (keyboardstate[DropBomb]) {
-	//		tmpPosXY = lvl.CoordenadaACasilla(Player_Position.x, Player_Position.y);
-	//		tmpPosXY = lvl.CasillaACoordenada(tmpPosXY.x, tmpPosXY.y);
-	//		posicionBomba = tmpPosXY;
-	//		bomb.lastTime = clock();
-	//		bomb.timeDown = 3.;
-	//		bomb.deltaTime = 0;
-	//		std::cout << "drop bomb" << std::endl;
-	//		dropbomb = true;
-	//	}
-	//}
+
 
 	//Daño
 	//ESTO DEBERÍA COMPROBAR SI EN LA POSICIÓN DE LA ONDA EXPANSIVA HAY UN PLAYER Y EN CASO AFIRMATIVO LE QUITA VIDA PERO NO VA.
@@ -140,8 +140,8 @@ void Player::Draw() {
 		//{ left2 = true; }
 		//else 
 		//{ left2 = true; }
-		Player::SpawnBomba(posicionBomba.x, posicionBomba.y, up, up2, down, down2, left, left2, right, right2);
-		std::cout << posicionBomba.x << " " << posicionBomba.y << std::endl;
+		Player::SpawnBomba(BombPosition.x, BombPosition.y, up, up2, down, down2, left, left2, right, right2);
+		std::cout << BombPosition.x << " " << BombPosition.y << std::endl;
 
 	}
 	if (bomb.explosion) {
