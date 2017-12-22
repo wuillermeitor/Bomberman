@@ -24,6 +24,21 @@ Ranking::Ranking()
 	Renderer::Instance()->LoadFont(ButtonMenu.font);
 	Renderer::Instance()->LoadTextureText(ButtonMenu.font.id, ButtonMenu.texto);
 	ButtonMenu.Texto_Rect = { ButtonMenu.XpositionText, ButtonMenu.YpositionText, ButtonMenu.texto.w, ButtonMenu.texto.h };
+
+	std::vector<std::pair<int, std::string>> ranking;
+	std::string playerName;
+	int score;
+	std::ifstream fentrada("../../res/files/Ranking.bin", std::ios::binary);
+	if (!fentrada.is_open()) {
+		throw "Pene";
+	}
+	while (!fentrada.eof()) {
+		fentrada >> playerName >> score;
+		ranking.push_back({ score,playerName });
+	}
+	for (const auto &p : ranking) {
+		std::cout << p.first << ' '<<  p.second << std::endl;
+	}
 }
 
 

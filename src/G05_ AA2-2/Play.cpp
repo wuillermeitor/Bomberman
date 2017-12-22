@@ -134,7 +134,7 @@ Play::Play(std::string level) {
 	player1.Player_Position.w = LADO_CASILLA;
 	player1.Player_Rect.w = LADO_CASILLA;
 	player1.frameTime = 0;
-	player1.lifes = 3;
+	player1.lifes = lives;
 	player1.score = 0;
 
 	//Load player 2
@@ -155,7 +155,7 @@ Play::Play(std::string level) {
 	player2.Player_Position.w = LADO_CASILLA;
 	player2.Player_Rect.w = LADO_CASILLA;
 	player2.frameTime = 0;
-	player2.lifes = 3;
+	player2.lifes = lives;
 	player2.score = 0;
 
 	//if (level == "PLAY1") {
@@ -218,7 +218,7 @@ Play::Play(std::string level) {
 	//TIME
 	hud.Time.color = hud.color;
 	hud.Time.id = "texto5_ID";
-	hud.Time.text = "Time left:  " + (std::to_string(hud.timeDown));
+	hud.Time.text = "Time left:  " + (std::to_string(time));
 	hud.Time.h = 100;
 	hud.Time.w = 300;
 	hud.TimeXpositionText = 200;
@@ -236,8 +236,24 @@ Play::~Play() {
 void Play::EventHandler() {
 	SDL_Event evento;
 	while (SDL_PollEvent(&evento)) {
-		if (hud.findeljuego || player1.lifes == 0 || player2.lifes == 0) {
+		if (findeljuego || player1.lifes == 0 || player2.lifes == 0) {
+			std::cout << "Guanyador, introdueix el teu nom per consola" << std::endl;
+			std::cin >> ganador;
+			std::cout << " Guanyador introduit" << std::endl;
+			std::ofstream fsalida("../../res/files/Ranking.bin", std::ios::binary | std::ios::app);
+			std::cout << " Obro binari " << std::endl;
+			if (player1.score < player2.score) { scoreganador = player1.score; }
+			if (player2.score <= player1.score) { scoreganador = player2.score; }
+			ganadorRanking = ganador + " " + std::to_string((scoreganador)) ;
+			fsalida << ganador << ' ' << scoreganador << ' ' ;
+
+
+		
+			std::cout << "En teoria he escrit ganador + score" << std::endl;
+			fsalida.close();
+			std::cout << " Fitxer binari " << std::endl;
 			scenestate = SceneState::GOTOMENU;
+			return;
 		}
 	}
 }
@@ -387,7 +403,21 @@ void Play::Update() {
 	player2.PlayerPositionXY = lvl.CoordenadaACasilla(player2.Player_Position.x, player2.Player_Position.y);
 	//std::cout << player2.Player_ID << " se encuentra en la posicion " << player2.PlayerPositionXY.x << " " << player2.PlayerPositionXY.y << std::endl;
 
-
+	//Clock Update
+	if (time > 0) {
+		deltaTime = (clock() - lastTime);
+		lastTime = clock();
+		deltaTime /= CLOCKS_PER_SEC;
+		time -= deltaTime;
+		//std::cout << timeDown << std::endl;
+		hud.Time.text = "Time left:  " + (std::to_string(static_cast<int>(time)));
+		std::cout << lastTime << std::endl;
+	}
+	if (time <= 0) {
+		//std::cout << "FIN DEL JUEGO" << std::endl;
+		hud.Time.text = "FIN DEL JUEGO";
+		findeljuego = true;
+	}
 
 	hud.Update();
 
