@@ -79,7 +79,6 @@ Vector2 Level::CasillaACoordenada(int i, int j)
 
 void Level::Draw()
 {
-
 	for (int i = 0; i < casillasAncho; ++i) {
 		for (int j = 0; j < casillasAlto; ++j) {
 			if (tablero[i][j] == casillas::INDESTRUCTIBLE_WALL) {
@@ -94,7 +93,7 @@ void Level::Draw()
 	}
 }
 
-void Level::Update()
+void Level::Update(int i, int j)
 {
 
 }

@@ -23,7 +23,7 @@ public:
 	casillas **tablero;
 	Wall Destructible_wall;
 	Wall Indestructible_wall;
-
+	Vector2 DestroyedWall;
 
 	Level();
 	~Level();
@@ -33,7 +33,7 @@ public:
 
 
 	void Draw();
-	void Update();
+	void Update(int i, int j);
 	void InputHandler();
 	void SpawnObject();
 	void DestroyObject();
