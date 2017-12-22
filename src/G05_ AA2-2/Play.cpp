@@ -251,9 +251,12 @@ void Play::Update() {
 	//std::cout << player1.Player_ID << " se encuentra en la posicion x y " << player1.PlayerPositionXY.x << " " << player1.PlayerPositionXY.y << std::endl;
 	//std::cout << player1.Player_ID << " se encuentra en la posicion w h " << player1.PlayerPositionWH.x << " " << player1.PlayerPositionWH.y << std::endl;
 	if (player1KeyMove == Key::UP && player1.PlayerPositionXY.y >= lvl.limiteIJ.y && player1.Player_Position.x >= LADO_CASILLA) {
-		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] == casillas::EMPTY) {
+		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y - 1] == casillas::EMPTY) {
 			player1.Player_Rect.y = 0;
 			player1.Player_Position.y -= 2;
+		}
+		else if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::EMPTY || lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y - 1] != casillas::EMPTY) {
+			player1.Player_Position.y += 2;
 		}
 	}
 	else if (player1KeyMove == Key::DOWN && player1.PlayerPositionXY.y + 1 < lvl.limiteWH.y && player1.Player_Position.x >= LADO_CASILLA) {
@@ -261,17 +264,26 @@ void Play::Update() {
 			player1.Player_Rect.y = player1.Player_Rect.h * 2;
 			player1.Player_Position.y += 2;
 		}
+		else if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y + 1] != casillas::EMPTY || lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] != casillas::EMPTY) {
+			player1.Player_Position.y -= 2;
+		}
 	}
-	else if (player1KeyMove == Key::LEFT && player1.PlayerPositionXY.x >= lvl.limiteIJ.x && player1.Player_Position.y >= LADO_CASILLA + HUD_HEIGHT) {
-		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] == casillas::EMPTY) {
+	else if (player1KeyMove == Key::LEFT && player1.PlayerPositionXY.x >= lvl.limiteIJ.x && player1.PlayerPositionWH.x - 1 >= lvl.limiteIJ.x && player1.Player_Position.y >= LADO_CASILLA + HUD_HEIGHT) {
+		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x - 1][player1.PlayerPositionWH.y] == casillas::EMPTY) {
 			player1.Player_Rect.y = player1.Player_Rect.h;
 			player1.Player_Position.x -= 2;
 		}
+		else if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::EMPTY || lvl.tablero[player1.PlayerPositionWH.x - 1][player1.PlayerPositionWH.y] != casillas::EMPTY) {
+			player1.Player_Position.x += 2;
+		}
 	}
 	else if (player1KeyMove == Key::RIGHT && player1.PlayerPositionXY.x + 1 < lvl.limiteWH.x && player1.Player_Position.y >= LADO_CASILLA + HUD_HEIGHT) {
-		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x + 1][player1.PlayerPositionWH.y] == casillas::EMPTY) {
+		if (lvl.tablero[player1.PlayerPositionXY.x + 1][player1.PlayerPositionXY.y] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] == casillas::EMPTY) {
 			player1.Player_Rect.y = player1.Player_Rect.h * 3;
 			player1.Player_Position.x += 2;
+		}
+		else if (lvl.tablero[player1.PlayerPositionXY.x + 1][player1.PlayerPositionXY.y] != casillas::EMPTY || lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] != casillas::EMPTY) {
+			player1.Player_Position.x -= 2;
 		}
 	}
 	if (player1KeyMove == Key::BOMB) {
@@ -376,7 +388,6 @@ void Play::Update() {
 	}
 
 	if (player1.bomb.explotando) {
-		std::cout << "explosion de la bomba" << std::endl;
 		//ARRIBA
 		if (player1.BombPositionIJ.y > lvl.limiteIJ.y) {
 			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 1] == casillas::DESTRUCTIBLE_WALL)
@@ -437,6 +448,8 @@ void Play::Update() {
 	if (player1.PlayerPositionXY.x <= -1) {
 		player1.Player_Position.x = LADO_CASILLA;
 	}
+	
+
 
 	player2KeyMove = player2.Movement(SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_RCTRL);
 	player2.PlayerPositionXY = lvl.CoordenadaACasilla(player2.Player_Position.x, player2.Player_Position.y);
