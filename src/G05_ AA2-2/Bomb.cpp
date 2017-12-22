@@ -151,7 +151,7 @@ void Bomb::Update() {
 		lastTime = clock();
 		deltaTime /= CLOCKS_PER_SEC;
 		timeDown -= deltaTime;
-		std::cout << timeDown << std::endl;
+		//std::cout << timeDown << std::endl;
 		if (timeDown <= 0) {
 			std::cout << "destruir bomba" << std::endl;
 			explosion = true;

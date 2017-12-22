@@ -108,6 +108,14 @@ void Player::Draw() {
 		bomb.lastTime = clock();
 		bomb.timeDown = 3.;
 		bomb.deltaTime = 0;
+		up = true;
+		up2 = true;
+		down = true;
+		down2 = true;
+		left = true;
+		left2 = true;
+		right = true;
+		right2 = true;
 		dropbomb = false;
 		bomb.explosion = false;
 	}

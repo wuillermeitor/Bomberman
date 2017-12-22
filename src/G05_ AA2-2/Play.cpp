@@ -276,33 +276,13 @@ void Play::Update() {
 	}
 	if (player1KeyMove == Key::BOMB) {
 		std::cout << "drop the bomb!" << std::endl;
-		player1.BombPositionIJ = player1.PlayerPositionXY;
-		player1.BombPositionXY = lvl.CasillaACoordenada(player1.BombPositionIJ.x, player1.BombPositionIJ.y);
-		player1.dropbomb = true;
-
+		player1.BombPositionIJ = player1.PlayerPositionXY;		
 		//ESTO DEBE COMPROBAR SI EN LA POSICIÓN DE LA ONDA EXPANSIVA HAY UN LADRILLO
-		if (player1.bomb.timeDown <= 1) {
-			player1.BombPositionIJ = lvl.CoordenadaACasilla(player1.BombPositionXY.x, player1.BombPositionXY.y);
-			std::cout << player1.BombPositionIJ.x << " " << player1.BombPositionIJ.y << std::endl;
-			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 1] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 1] == casillas::DESTRUCTIBLE_WALL)
-			{
-				player1.down = true;
-			}
-			else
-			{
-				player1.down = false;
-			}
+		std::cout << player1.BombPositionIJ.x << " " << player1.BombPositionIJ.y << std::endl;
 
-			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 2] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 2] == casillas::DESTRUCTIBLE_WALL)
-			{
-				player1.down2 = true;
-			}
-			else
-			{
-				player1.down2 = false;
-			}
-
-			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 1] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 1] == casillas::DESTRUCTIBLE_WALL)
+		//COMPRUEBA ARRIBA
+		if (player1.BombPositionIJ.y > lvl.limiteIJ.y) {
+			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 1] == casillas::INDESTRUCTIBLE_WALL)
 			{
 				player1.up = true;
 			}
@@ -311,34 +291,43 @@ void Play::Update() {
 				player1.up = false;
 			}
 
-			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 2] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 2] == casillas::DESTRUCTIBLE_WALL)
+			if (player1.BombPositionIJ.y > lvl.limiteIJ.y + 1 && player1.up == false) {
+				if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 2] == casillas::INDESTRUCTIBLE_WALL)
+				{
+					player1.up2 = true;
+				}
+				else
+				{
+					player1.up2 = false;
+				}
+			}
+		}
+
+		//COMPRUEBA ABAJO
+		if (player1.BombPositionIJ.y < lvl.limiteWH.y - 1) {
+			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 1] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 1] == casillas::DESTRUCTIBLE_WALL)
 			{
-				player1.up2 = true;
+				player1.down = true;
 			}
 			else
 			{
-				player1.up2 = false;
+				player1.down = false;
 			}
+			if (player1.BombPositionIJ.y < lvl.limiteWH.y - 2 && player1.down == false) {
+				if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 2] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 2] == casillas::DESTRUCTIBLE_WALL)
+				{
+					player1.down2 = true;
+				}
+				else
+				{
+					player1.down2 = false;
+				}
+			}
+		}
 
-			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x + 1] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x + 1] == casillas::DESTRUCTIBLE_WALL)
-			{
-				player1.right = true;
-			}
-			else
-			{
-				player1.right = false;
-			}
-
-			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x + 2] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x + 2] == casillas::DESTRUCTIBLE_WALL)
-			{
-				player1.right2 = true;
-			}
-			else
-			{
-				player1.right2 = false;
-			}
-
-			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x - 1] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x - 1] == casillas::DESTRUCTIBLE_WALL)
+		//COMPRUEBA IZQUIERDA
+		if (player1.BombPositionIJ.x > lvl.limiteIJ.x) {
+			if (lvl.tablero[player1.BombPositionIJ.x - 1][player1.BombPositionIJ.y] == casillas::INDESTRUCTIBLE_WALL)
 			{
 				player1.left = true;
 			}
@@ -347,15 +336,44 @@ void Play::Update() {
 				player1.left = false;
 			}
 
-			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x - 2] == casillas::INDESTRUCTIBLE_WALL || lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.x - 2] == casillas::DESTRUCTIBLE_WALL)
+			if (player1.BombPositionIJ.x > lvl.limiteIJ.x + 1 && player1.left == false) {
+				if (lvl.tablero[player1.BombPositionIJ.x - 2][player1.BombPositionIJ.y] == casillas::INDESTRUCTIBLE_WALL)
+				{
+					player1.left2 = true;
+				}
+				else
+				{
+					player1.left2 = false;
+				}
+			}
+		}
+
+		//COMPRUEBA DERECHA
+		if (player1.BombPositionIJ.x < lvl.limiteWH.x - 1) {
+			if (lvl.tablero[player1.BombPositionIJ.x + 1][player1.BombPositionIJ.y] == casillas::INDESTRUCTIBLE_WALL)
 			{
-				player1.left2 = true;
+				player1.right = true;
 			}
 			else
 			{
-				player1.left2 = false;
+				player1.right = false;
+			}
+
+			if (player1.BombPositionIJ.x < lvl.limiteWH.x - 2 && player1.right == false) {
+				if (lvl.tablero[player1.BombPositionIJ.x + 2][player1.BombPositionIJ.y] == casillas::INDESTRUCTIBLE_WALL)
+				{
+					player1.right2 = true;
+				}
+				else
+				{
+					player1.right2 = false;
+				}
 			}
 		}
+
+
+		player1.BombPositionXY = lvl.CasillaACoordenada(player1.BombPositionIJ.x, player1.BombPositionIJ.y);
+		player1.dropbomb = true;
 	}
 
 	if (player1.PlayerPositionXY.y <= -1) {

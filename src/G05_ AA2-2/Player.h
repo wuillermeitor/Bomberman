@@ -26,14 +26,14 @@ public:
 	Vector2 BombPositionXY;
 	Vector2 BombPositionIJ;
 	Bomb bomb;
-	bool up = false;
-	bool up2 = false;
-	bool down = false;
-	bool down2 = false;
-	bool left = false;
-	bool left2 = false;
-	bool right = false;
-	bool right2 = false;
+	bool up = true;
+	bool up2 = true;
+	bool down = true;
+	bool down2 = true;
+	bool left = true;
+	bool left2 = true;
+	bool right = true;
+	bool right2 = true;
 
 
 	//Métodos
