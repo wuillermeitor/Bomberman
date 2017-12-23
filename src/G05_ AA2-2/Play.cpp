@@ -500,7 +500,7 @@ void Play::Update() {
 			}
 		}
 
-		if (!player1.Helmet) {
+		if (!player1.Helmet && !player1.alreadyDamaged) {
 			if ((player1.BombPositionIJ.x == player1.PlayerPositionXY.x && player1.BombPositionIJ.y - 1 == player1.PlayerPositionXY.y)
 				|| (player1.BombPositionIJ.x == player1.PlayerPositionWH.x && player1.BombPositionIJ.y - 1 == player1.PlayerPositionWH.y)
 				|| (player1.BombPositionIJ.x == player1.PlayerPositionXY.x && player1.BombPositionIJ.y - 2 == player1.PlayerPositionXY.y)
@@ -518,12 +518,38 @@ void Play::Update() {
 				|| (player1.BombPositionIJ.x + 2 == player1.PlayerPositionXY.x && player1.BombPositionIJ.y == player1.PlayerPositionXY.y)
 				|| (player1.BombPositionIJ.x + 2 == player1.PlayerPositionWH.x && player1.BombPositionIJ.y == player1.PlayerPositionWH.y)) {
 				std::cout << "DMG player 1";
-				player1.lifes--;
+				player1.lifes -= 1;
+				player1.alreadyDamaged = true;
 				std::cout << "EL player 1 tiene estas vidas: " << player1.lifes << std::endl;
 			}
 		}
+		if (!player2.Helmet && !player2.alreadyDamaged) {
+			if ((player1.BombPositionIJ.x == player2.PlayerPositionXY.x && player1.BombPositionIJ.y - 1 == player2.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x == player2.PlayerPositionWH.x && player1.BombPositionIJ.y - 1 == player2.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x == player2.PlayerPositionXY.x && player1.BombPositionIJ.y - 2 == player2.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x == player2.PlayerPositionWH.x && player1.BombPositionIJ.y - 2 == player2.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x == player2.PlayerPositionXY.x && player1.BombPositionIJ.y + 1 == player2.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x == player2.PlayerPositionWH.x && player1.BombPositionIJ.y + 1 == player2.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x == player2.PlayerPositionXY.x && player1.BombPositionIJ.y + 2 == player2.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x == player2.PlayerPositionWH.x && player1.BombPositionIJ.y + 2 == player2.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x - 1 == player2.PlayerPositionXY.x && player1.BombPositionIJ.y == player2.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x - 1 == player2.PlayerPositionWH.x && player1.BombPositionIJ.y == player2.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x - 2 == player2.PlayerPositionXY.x && player1.BombPositionIJ.y == player2.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x - 2 == player2.PlayerPositionWH.x && player1.BombPositionIJ.y == player2.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x + 1 == player2.PlayerPositionXY.x && player1.BombPositionIJ.y == player2.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x + 1 == player2.PlayerPositionWH.x && player1.BombPositionIJ.y == player2.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x + 2 == player2.PlayerPositionXY.x && player1.BombPositionIJ.y == player2.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x + 2 == player2.PlayerPositionWH.x && player1.BombPositionIJ.y == player2.PlayerPositionWH.y)) {
+				player2.lifes -= 1;
+				player2.alreadyDamaged = true;
+				player1.score += 100;
+			}
+		}
 	}
-
+	else {
+		player1.alreadyDamaged = false;
+		player2.alreadyDamaged = false;
+	}
 	//CORRECCIÓN DE POSICIÓN
 	if (player1.PlayerPositionXY.y <= -1) {
 		player1.Player_Position.y = LADO_CASILLA + HUD_HEIGHT;
@@ -590,6 +616,8 @@ void Play::Update() {
 	}
 	hud.P1score.text = "Score p1:  " + std::to_string(player1.score);
 	hud.P2score.text = "Score p2:  " + std::to_string(player2.score);
+	hud.P1lifes.text = "Lifes p1:  " + std::to_string(player1.lifes);
+	hud.P2lifes.text = "Lifes p2:  " + std::to_string(player2.lifes);
 	hud.Update();
 
 }

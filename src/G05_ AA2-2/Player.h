@@ -21,7 +21,7 @@ public:
 	bool Helmet = false;
 	bool IsPoweredUp = false;
 	int speed = 2;	
-
+	bool alreadyDamaged = false;
 	clock_t lastTime = clock();
 	float timeDown = 10.;
 	float deltaTime = 0;
