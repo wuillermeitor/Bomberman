@@ -1,8 +1,9 @@
 #pragma once
+#include <time.h>
 #include "Scene.h"
 #include "Types.h"
 #include "Constants.h"
-#include "Wall.h"
+#include "GameObject.h"
 #include "Bomb.h"
 
 class Level {
@@ -21,8 +22,10 @@ public:
 	int casillasAncho, casillasAlto;
 	Vector2 limiteIJ, limiteWH;
 	casillas **tablero;
-	Wall Destructible_wall;
-	Wall Indestructible_wall;
+	GameObject Destructible_wall;
+	GameObject Indestructible_wall;
+	GameObject Helmet;
+	GameObject Rollers;
 	Vector2 DestroyedWall;
 
 	Level();
@@ -34,9 +37,6 @@ public:
 
 	void Draw();
 	void Update(int i, int j);
-	void InputHandler();
-	void SpawnObject();
-	void DestroyObject();
 
 };
 

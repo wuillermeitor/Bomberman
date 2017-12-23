@@ -153,7 +153,7 @@ void Bomb::Update() {
 		timeDown -= deltaTime;
 		//std::cout << timeDown << std::endl;
 		if (timeDown <= 0) {
-			std::cout << "destruir bomba" << std::endl;
+			//std::cout << "destruir bomba" << std::endl;
 			explosion = true;
 			explotando = false;
 		}
@@ -170,7 +170,7 @@ void Bomb::Draw(int i, int j, bool up, bool up2, bool down, bool down2, bool lef
 		}
 		else if (timeDown <= 1) {
 			explotando = true;
-			std::cout << "Deberia salir la explosion" << std::endl;
+			//std::cout << "Deberia salir la explosion" << std::endl;
 			//Bomba0
 			Explosion_Position.x = Bombas_Position.x;
 			Explosion_Position.y = Bombas_Position.y;

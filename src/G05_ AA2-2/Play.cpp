@@ -251,7 +251,8 @@ void Play::Update() {
 	//std::cout << player1.Player_ID << " se encuentra en la posicion x y " << player1.PlayerPositionXY.x << " " << player1.PlayerPositionXY.y << std::endl;
 	//std::cout << player1.Player_ID << " se encuentra en la posicion w h " << player1.PlayerPositionWH.x << " " << player1.PlayerPositionWH.y << std::endl;
 	if (player1KeyMove == Key::UP && player1.PlayerPositionXY.y >= lvl.limiteIJ.y && player1.Player_Position.x >= LADO_CASILLA) {
-		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y - 1] == casillas::EMPTY) {
+		if ((lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::INDESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y - 1] != casillas::INDESTRUCTIBLE_WALL)
+			&& (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::DESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y - 1] != casillas::DESTRUCTIBLE_WALL)) {
 			player1.Player_Rect.y = 0;
 			player1.Player_Position.y -= 2;
 		}
@@ -260,7 +261,8 @@ void Play::Update() {
 		}
 	}
 	else if (player1KeyMove == Key::DOWN && player1.PlayerPositionXY.y + 1 < lvl.limiteWH.y && player1.Player_Position.x >= LADO_CASILLA) {
-		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y + 1] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] == casillas::EMPTY) {
+		if ((lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y + 1] != casillas::INDESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] != casillas::INDESTRUCTIBLE_WALL)
+			&& (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y + 1] != casillas::DESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] != casillas::DESTRUCTIBLE_WALL)){
 			player1.Player_Rect.y = player1.Player_Rect.h * 2;
 			player1.Player_Position.y += 2;
 		}
@@ -269,7 +271,8 @@ void Play::Update() {
 		}
 	}
 	else if (player1KeyMove == Key::LEFT && player1.PlayerPositionXY.x >= lvl.limiteIJ.x && player1.PlayerPositionWH.x - 1 >= lvl.limiteIJ.x && player1.Player_Position.y >= LADO_CASILLA + HUD_HEIGHT) {
-		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x - 1][player1.PlayerPositionWH.y] == casillas::EMPTY) {
+		if ((lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::INDESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x - 1][player1.PlayerPositionWH.y] != casillas::INDESTRUCTIBLE_WALL)
+			&& (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::DESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x - 1][player1.PlayerPositionWH.y] != casillas::DESTRUCTIBLE_WALL)) {
 			player1.Player_Rect.y = player1.Player_Rect.h;
 			player1.Player_Position.x -= 2;
 		}
@@ -278,7 +281,8 @@ void Play::Update() {
 		}
 	}
 	else if (player1KeyMove == Key::RIGHT && player1.PlayerPositionXY.x + 1 < lvl.limiteWH.x && player1.Player_Position.y >= LADO_CASILLA + HUD_HEIGHT) {
-		if (lvl.tablero[player1.PlayerPositionXY.x + 1][player1.PlayerPositionXY.y] == casillas::EMPTY && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] == casillas::EMPTY) {
+		if ((lvl.tablero[player1.PlayerPositionXY.x + 1][player1.PlayerPositionXY.y] != casillas::INDESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] != casillas::INDESTRUCTIBLE_WALL)
+			&& (lvl.tablero[player1.PlayerPositionXY.x + 1][player1.PlayerPositionXY.y] != casillas::DESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] != casillas::DESTRUCTIBLE_WALL)) {
 			player1.Player_Rect.y = player1.Player_Rect.h * 3;
 			player1.Player_Position.x += 2;
 		}
@@ -393,11 +397,13 @@ void Play::Update() {
 			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 1] == casillas::DESTRUCTIBLE_WALL)
 			{
 				lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 1] = casillas::EMPTY;
+				lvl.Update(player1.BombPositionIJ.x, player1.BombPositionIJ.y - 1);
 			}
 			if (player1.BombPositionIJ.y > lvl.limiteIJ.y + 1) {
 				if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 2] == casillas::DESTRUCTIBLE_WALL)
 				{
 					lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 2] = casillas::EMPTY;
+					lvl.Update(player1.BombPositionIJ.x, player1.BombPositionIJ.y - 1);
 				}
 			}
 		}
@@ -406,11 +412,13 @@ void Play::Update() {
 			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 1] == casillas::DESTRUCTIBLE_WALL)
 			{
 				lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 1] = casillas::EMPTY;
+				lvl.Update(player1.BombPositionIJ.x, player1.BombPositionIJ.y - 1);
 			}
 			if (player1.BombPositionIJ.y < lvl.limiteWH.y - 2) {
 				if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 2] == casillas::DESTRUCTIBLE_WALL)
 				{
 					lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 2] = casillas::EMPTY;
+					lvl.Update(player1.BombPositionIJ.x, player1.BombPositionIJ.y + 2);
 				}
 			}
 		}
@@ -419,11 +427,13 @@ void Play::Update() {
 			if (lvl.tablero[player1.BombPositionIJ.x - 1][player1.BombPositionIJ.y] == casillas::DESTRUCTIBLE_WALL)
 			{
 				lvl.tablero[player1.BombPositionIJ.x - 1][player1.BombPositionIJ.y] = casillas::EMPTY;
+				lvl.Update(player1.BombPositionIJ.x - 1, player1.BombPositionIJ.y);
 			}
 			if (player1.BombPositionIJ.x > lvl.limiteIJ.x + 1) {
 				if (lvl.tablero[player1.BombPositionIJ.x - 2][player1.BombPositionIJ.y] == casillas::DESTRUCTIBLE_WALL)
 				{
 					lvl.tablero[player1.BombPositionIJ.x - 2][player1.BombPositionIJ.y] = casillas::EMPTY;
+					lvl.Update(player1.BombPositionIJ.x - 2, player1.BombPositionIJ.y);
 				}
 			}
 		}
@@ -432,11 +442,13 @@ void Play::Update() {
 			if (lvl.tablero[player1.BombPositionIJ.x + 1][player1.BombPositionIJ.y] == casillas::DESTRUCTIBLE_WALL)
 			{
 				lvl.tablero[player1.BombPositionIJ.x + 1][player1.BombPositionIJ.y] = casillas::EMPTY;
+				lvl.Update(player1.BombPositionIJ.x + 1, player1.BombPositionIJ.y);
 			}
 			if (player1.BombPositionIJ.x < lvl.limiteWH.x - 2) {
 				if (lvl.tablero[player1.BombPositionIJ.x + 2][player1.BombPositionIJ.y] == casillas::DESTRUCTIBLE_WALL)
 				{
 					lvl.tablero[player1.BombPositionIJ.x + 2][player1.BombPositionIJ.y] = casillas::EMPTY;
+					lvl.Update(player1.BombPositionIJ.x + 2, player1.BombPositionIJ.y);
 				}
 			}
 		}
