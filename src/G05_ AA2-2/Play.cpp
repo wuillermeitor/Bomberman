@@ -248,46 +248,74 @@ void Play::Update() {
 	player1KeyMove = player1.Movement(SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_SPACE);
 	player1.PlayerPositionXY = lvl.CoordenadaACasilla(player1.Player_Position.x, player1.Player_Position.y - (LADO_CASILLA + 17) / 2);
 	player1.PlayerPositionWH = lvl.CoordenadaACasilla(player1.Player_Position.x + LADO_CASILLA - 1, player1.Player_Position.y - ((LADO_CASILLA + 17) / 2) + LADO_CASILLA - 1);
+	std::cout << player1.speed << std::endl;
+	if (player1.Rollers) {
+		player1.speed = 2 * 1.8;
+		//debería ser 3.6 pero como se mueve por píxeles y los píxeles son enteros, se trunca a 3 así que el boost es casi inapreciable.
+	}
+	else {
+		player1.speed = 2;
+	}
+
+	if (player1.IsPoweredUp) {
+		std::cout << player1.timeDown << std::endl;
+		std::cout << "player 1 is poweredup so countdown" << std::endl;
+		player1.deltaTime = (clock() - player1.lastTime);
+		player1.lastTime = clock();
+		player1.deltaTime /= CLOCKS_PER_SEC;
+		player1.timeDown -= player1.deltaTime;
+		if (player1.timeDown <= 0) {
+			player1.Rollers = false;
+			player1.Helmet = false;
+			player1.IsPoweredUp = false;
+		}
+	}
+	else {
+		std::cout << "player 1 is no more poweredup" << std::endl;
+		player1.lastTime = clock();
+		player1.timeDown = 10.;
+		player1.deltaTime = 0;
+	}
 	//std::cout << player1.Player_ID << " se encuentra en la posicion x y " << player1.PlayerPositionXY.x << " " << player1.PlayerPositionXY.y << std::endl;
 	//std::cout << player1.Player_ID << " se encuentra en la posicion w h " << player1.PlayerPositionWH.x << " " << player1.PlayerPositionWH.y << std::endl;
 	if (player1KeyMove == Key::UP && player1.PlayerPositionXY.y >= lvl.limiteIJ.y && player1.Player_Position.x >= LADO_CASILLA) {
 		if ((lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::INDESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y - 1] != casillas::INDESTRUCTIBLE_WALL)
 			&& (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::DESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y - 1] != casillas::DESTRUCTIBLE_WALL)) {
 			player1.Player_Rect.y = 0;
-			player1.Player_Position.y -= 2;
+			player1.Player_Position.y -= player1.speed;
 		}
 		else if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::EMPTY || lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y - 1] != casillas::EMPTY) {
-			player1.Player_Position.y += 2;
+			player1.Player_Position.y += player1.speed;
 		}
 	}
 	else if (player1KeyMove == Key::DOWN && player1.PlayerPositionXY.y + 1 < lvl.limiteWH.y && player1.Player_Position.x >= LADO_CASILLA) {
 		if ((lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y + 1] != casillas::INDESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] != casillas::INDESTRUCTIBLE_WALL)
 			&& (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y + 1] != casillas::DESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] != casillas::DESTRUCTIBLE_WALL)){
 			player1.Player_Rect.y = player1.Player_Rect.h * 2;
-			player1.Player_Position.y += 2;
+			player1.Player_Position.y += player1.speed;
 		}
 		else if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y + 1] != casillas::EMPTY || lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] != casillas::EMPTY) {
-			player1.Player_Position.y -= 2;
+			player1.Player_Position.y -= player1.speed;
 		}
 	}
 	else if (player1KeyMove == Key::LEFT && player1.PlayerPositionXY.x >= lvl.limiteIJ.x && player1.PlayerPositionWH.x - 1 >= lvl.limiteIJ.x && player1.Player_Position.y >= LADO_CASILLA + HUD_HEIGHT) {
 		if ((lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::INDESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x - 1][player1.PlayerPositionWH.y] != casillas::INDESTRUCTIBLE_WALL)
 			&& (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::DESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x - 1][player1.PlayerPositionWH.y] != casillas::DESTRUCTIBLE_WALL)) {
 			player1.Player_Rect.y = player1.Player_Rect.h;
-			player1.Player_Position.x -= 2;
+			player1.Player_Position.x -= player1.speed;
 		}
 		else if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::EMPTY || lvl.tablero[player1.PlayerPositionWH.x - 1][player1.PlayerPositionWH.y] != casillas::EMPTY) {
-			player1.Player_Position.x += 2;
+			player1.Player_Position.x += player1.speed;
 		}
 	}
 	else if (player1KeyMove == Key::RIGHT && player1.PlayerPositionXY.x + 1 < lvl.limiteWH.x && player1.Player_Position.y >= LADO_CASILLA + HUD_HEIGHT) {
 		if ((lvl.tablero[player1.PlayerPositionXY.x + 1][player1.PlayerPositionXY.y] != casillas::INDESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] != casillas::INDESTRUCTIBLE_WALL)
 			&& (lvl.tablero[player1.PlayerPositionXY.x + 1][player1.PlayerPositionXY.y] != casillas::DESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] != casillas::DESTRUCTIBLE_WALL)) {
 			player1.Player_Rect.y = player1.Player_Rect.h * 3;
-			player1.Player_Position.x += 2;
+			player1.Player_Position.x += player1.speed;
 		}
 		else if (lvl.tablero[player1.PlayerPositionXY.x + 1][player1.PlayerPositionXY.y] != casillas::EMPTY || lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] != casillas::EMPTY) {
-			player1.Player_Position.x -= 2;
+			player1.Player_Position.x -= player1.speed;
 		}
 	}
 	if (player1KeyMove == Key::BOMB) {
@@ -460,7 +488,21 @@ void Play::Update() {
 	if (player1.PlayerPositionXY.x <= -1) {
 		player1.Player_Position.x = LADO_CASILLA;
 	}
-	
+
+	if (player1.PlayerPositionXY.y >=0 && player1.PlayerPositionXY.x >=0 && player1.PlayerPositionWH.x<lvl.limiteWH.x && player1.PlayerPositionWH.y<lvl.limiteWH.y && !player1.IsPoweredUp) {
+		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] == casillas::ROLLERS || lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] == casillas::ROLLERS) {
+			lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] = casillas::EMPTY;
+			lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] = casillas::EMPTY;
+			player1.Rollers = true;
+			player1.IsPoweredUp = true;
+		}
+		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] == casillas::HELMET || lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] == casillas::HELMET) {
+			lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] = casillas::EMPTY;
+			lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] = casillas::EMPTY;
+			player1.Helmet = true;
+			player1.IsPoweredUp = true;
+		}
+	}
 
 
 	player2KeyMove = player2.Movement(SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_RCTRL);

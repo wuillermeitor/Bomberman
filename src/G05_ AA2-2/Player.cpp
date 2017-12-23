@@ -52,7 +52,6 @@ Key Player::Movement(SDL_Scancode UP, SDL_Scancode DOWN, SDL_Scancode LEFT, SDL_
 
 	//Movimiento
 	const Uint8 *keyboardstate = SDL_GetKeyboardState(NULL);
-	//EL BOOSTEO DE LOS PATINES ES FUNCIONAL PERO COMO NO PODEMOS ROMPER LADRILLOS NO PODEMOS CARGAR POWER-UPS NO SE ACTIVAN.
 
 	if (!dropbomb) {
 		if (keyboardstate[DROPBOMB]) {

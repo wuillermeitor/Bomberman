@@ -19,8 +19,13 @@ public:
 	int lifes, score;
 	bool Rollers = false;
 	bool Helmet = false;
-	int speed = 5;
-	int RollersBoost = 1.8;
+	bool IsPoweredUp = false;
+	int speed = 2;	
+
+	clock_t lastTime = clock();
+	float timeDown = 10.;
+	float deltaTime = 0;
+
 	Vector2 PlayerPositionXY;
 	Vector2 PlayerPositionWH;
 	Vector2 BombPositionXY;
