@@ -240,7 +240,7 @@ void Play::EventHandler() {
 			std::cout << "Guanyador, introdueix el teu nom per consola" << std::endl;
 			std::cin >> ganador;
 			std::cout << " Guanyador introduit" << std::endl;
-			std::ofstream fsalida("../../res/files/Ranking.bin", std::ios::binary | std::ios::app);
+			std::ofstream fsalida("../../res/files/ranking.bin", std::ios::binary | std::ios::app);
 			std::cout << " Obro binari " << std::endl;
 			if (player1.score < player2.score) { scoreganador = player1.score; }
 			if (player2.score <= player1.score) { scoreganador = player2.score; }

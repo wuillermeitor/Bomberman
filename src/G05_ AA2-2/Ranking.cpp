@@ -134,7 +134,7 @@ Ranking::Ranking()
 	ranking.push_back({ " "," " });
 	std::string playerName;
 	int score;
-	std::ifstream fentrada("../../res/files/Ranking.bin", std::ios::binary);
+	std::ifstream fentrada("../../res/files/ranking.bin", std::ios::binary);
 	if (!fentrada.is_open()) {
 		throw "error";
 	}
@@ -157,7 +157,9 @@ Ranking::Ranking()
 	scores7.text = ranking[7].second + ' ' + (ranking[7].first);
 	scores8.text = ranking[8].second + ' ' + (ranking[8].first);
 	scores9.text = ranking[9].second + ' ' + (ranking[9].first);
+
 }
+
 
 
 Ranking::~Ranking()
