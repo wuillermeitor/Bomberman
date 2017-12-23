@@ -247,7 +247,7 @@ void Play::Update() {
 	const Uint8 *keyboardstate = SDL_GetKeyboardState(NULL);
 	player1KeyMove = player1.Movement(SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_SPACE);
 	player1.PlayerPositionXY = lvl.CoordenadaACasilla(player1.Player_Position.x, player1.Player_Position.y - (LADO_CASILLA + 17) / 2);
-	player1.PlayerPositionWH = lvl.CoordenadaACasilla(player1.Player_Position.x + LADO_CASILLA - 2, player1.Player_Position.y - ((LADO_CASILLA + 17) / 2) + LADO_CASILLA - 2);
+	player1.PlayerPositionWH = lvl.CoordenadaACasilla(player1.Player_Position.x + LADO_CASILLA - 1, player1.Player_Position.y - ((LADO_CASILLA + 17) / 2) + LADO_CASILLA - 1);
 	//std::cout << player1.Player_ID << " se encuentra en la posicion x y " << player1.PlayerPositionXY.x << " " << player1.PlayerPositionXY.y << std::endl;
 	//std::cout << player1.Player_ID << " se encuentra en la posicion w h " << player1.PlayerPositionWH.x << " " << player1.PlayerPositionWH.y << std::endl;
 	if (player1KeyMove == Key::UP && player1.PlayerPositionXY.y >= lvl.limiteIJ.y && player1.Player_Position.x >= LADO_CASILLA) {
@@ -393,13 +393,13 @@ void Play::Update() {
 
 	if (player1.bomb.explotando) {
 		//ARRIBA
-		if (player1.BombPositionIJ.y > lvl.limiteIJ.y) {
+		if (player1.BombPositionIJ.y > lvl.limiteIJ.y && player1.up == false) {
 			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 1] == casillas::DESTRUCTIBLE_WALL)
 			{
 				lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 1] = casillas::EMPTY;
 				lvl.Update(player1.BombPositionIJ.x, player1.BombPositionIJ.y - 1);
 			}
-			if (player1.BombPositionIJ.y > lvl.limiteIJ.y + 1) {
+			if (player1.BombPositionIJ.y > lvl.limiteIJ.y + 1 && player1.up2 == false) {
 				if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 2] == casillas::DESTRUCTIBLE_WALL)
 				{
 					lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 2] = casillas::EMPTY;
@@ -408,13 +408,13 @@ void Play::Update() {
 			}
 		}
 		//ABAJO
-		if (player1.BombPositionIJ.y < lvl.limiteWH.y - 1) {
+		if (player1.BombPositionIJ.y < lvl.limiteWH.y - 1 && player1.down == false) {
 			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 1] == casillas::DESTRUCTIBLE_WALL)
 			{
 				lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 1] = casillas::EMPTY;
 				lvl.Update(player1.BombPositionIJ.x, player1.BombPositionIJ.y - 1);
 			}
-			if (player1.BombPositionIJ.y < lvl.limiteWH.y - 2) {
+			if (player1.BombPositionIJ.y < lvl.limiteWH.y - 2 && player1.down2 == false) {
 				if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 2] == casillas::DESTRUCTIBLE_WALL)
 				{
 					lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 2] = casillas::EMPTY;
@@ -423,13 +423,13 @@ void Play::Update() {
 			}
 		}
 		//IZQUIERDA
-		if (player1.BombPositionIJ.x > lvl.limiteIJ.x) {
+		if (player1.BombPositionIJ.x > lvl.limiteIJ.x && player1.left == false) {
 			if (lvl.tablero[player1.BombPositionIJ.x - 1][player1.BombPositionIJ.y] == casillas::DESTRUCTIBLE_WALL)
 			{
 				lvl.tablero[player1.BombPositionIJ.x - 1][player1.BombPositionIJ.y] = casillas::EMPTY;
 				lvl.Update(player1.BombPositionIJ.x - 1, player1.BombPositionIJ.y);
 			}
-			if (player1.BombPositionIJ.x > lvl.limiteIJ.x + 1) {
+			if (player1.BombPositionIJ.x > lvl.limiteIJ.x + 1 && player1.left2 == false) {
 				if (lvl.tablero[player1.BombPositionIJ.x - 2][player1.BombPositionIJ.y] == casillas::DESTRUCTIBLE_WALL)
 				{
 					lvl.tablero[player1.BombPositionIJ.x - 2][player1.BombPositionIJ.y] = casillas::EMPTY;
@@ -438,13 +438,13 @@ void Play::Update() {
 			}
 		}
 		//DERECHA
-		if (player1.BombPositionIJ.x < lvl.limiteWH.x - 1) {
+		if (player1.BombPositionIJ.x < lvl.limiteWH.x - 1 && player1.right == false) {
 			if (lvl.tablero[player1.BombPositionIJ.x + 1][player1.BombPositionIJ.y] == casillas::DESTRUCTIBLE_WALL)
 			{
 				lvl.tablero[player1.BombPositionIJ.x + 1][player1.BombPositionIJ.y] = casillas::EMPTY;
 				lvl.Update(player1.BombPositionIJ.x + 1, player1.BombPositionIJ.y);
 			}
-			if (player1.BombPositionIJ.x < lvl.limiteWH.x - 2) {
+			if (player1.BombPositionIJ.x < lvl.limiteWH.x - 2 && player1.right2 == false) {
 				if (lvl.tablero[player1.BombPositionIJ.x + 2][player1.BombPositionIJ.y] == casillas::DESTRUCTIBLE_WALL)
 				{
 					lvl.tablero[player1.BombPositionIJ.x + 2][player1.BombPositionIJ.y] = casillas::EMPTY;
