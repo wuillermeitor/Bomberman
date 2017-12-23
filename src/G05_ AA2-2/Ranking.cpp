@@ -24,21 +24,41 @@ Ranking::Ranking()
 	Renderer::Instance()->LoadFont(ButtonMenu.font);
 	Renderer::Instance()->LoadTextureText(ButtonMenu.font.id, ButtonMenu.texto);
 	ButtonMenu.Texto_Rect = { ButtonMenu.XpositionText, ButtonMenu.YpositionText, ButtonMenu.texto.w, ButtonMenu.texto.h };
+	//RANKING
+	font.id = "game_over";
+	font.path = "../../res/ttf/game_over.ttf";
+	font.size = 500;
+	color = { 0, 255, 255, 0 };
+	scores.color = color;
+	scores.text = "works?";
+	scores.h = 100;
+	scores.w = 200;
+	scoresXpositionText = SCREEN_WIDTH / 2 - scores.w / 2;
+	scoresYpositionText = SCREEN_HEIGHT / 2 - scores.h / 2;
+	Renderer::Instance()->LoadFont(font);
+	scores_Rect = { scoresXpositionText, scoresYpositionText, scores.w, scores.h };
 
 	std::vector<std::pair<int, std::string>> ranking;
 	std::string playerName;
 	int score;
 	std::ifstream fentrada("../../res/files/Ranking.bin", std::ios::binary);
 	if (!fentrada.is_open()) {
-		throw "Pene";
+		throw "error";
 	}
 	while (!fentrada.eof()) {
 		fentrada >> playerName >> score;
 		ranking.push_back({ score,playerName });
 	}
+	std::sort(ranking.rbegin(), ranking.rend());
+
 	for (const auto &p : ranking) {
-		std::cout << p.first << ' '<<  p.second << std::endl;
+		std::cout << p.first << p.second << std::endl;
 	}
+
+	scores.text = ranking[0].second + ' '+ std::to_string(ranking[0].first) ;
+	//scores1.text = std::to_string(ranking[1].first) + ranking[1].second;
+
+
 }
 
 
@@ -48,6 +68,8 @@ Ranking::~Ranking()
 
 void Ranking::Update() {
 	ButtonMenu.update();
+	Renderer::Instance()->LoadTextureText(font.id, scores);
+
 }
 
 
@@ -64,6 +86,7 @@ void Ranking::EventHandler() {
 
 void Ranking::Draw() {
 	Renderer::Instance()->PushImage(BG_ID, BG_Rect);
+	Renderer::Instance()->PushImage(scores.id, scores_Rect);
 	ButtonMenu.draw();
 	Renderer::Instance()->Render();
 	Renderer::Instance()->Clear();

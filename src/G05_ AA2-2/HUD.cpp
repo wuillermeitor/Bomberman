@@ -64,19 +64,6 @@ void HUD::Update() {
 	Renderer::Instance()->LoadTextureText(font.id, P1score);
 	Renderer::Instance()->LoadTextureText(font.id, P2lifes);
 	Renderer::Instance()->LoadTextureText(font.id, P2score);
-	//if (timeDown > 0) {
-	//	deltaTime = (clock() - lastTime);
-	//	lastTime = clock();
-	//	deltaTime /= CLOCKS_PER_SEC;
-	//	timeDown -= deltaTime;
-	//	//std::cout << timeDown << std::endl;
-	//	Time.text = "Time left:  " + (std::to_string(static_cast<int>(timeDown)));
-	//}
-	//if (timeDown <= 0) {
-	//	//std::cout << "FIN DEL JUEGO" << std::endl;
-	//	Time.text = "FIN DEL JUEGO";
-	//	findeljuego = true;
-	//}
 }
 
 void HUD::Draw() {
