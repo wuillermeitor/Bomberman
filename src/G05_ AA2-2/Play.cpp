@@ -254,10 +254,11 @@ void Play::EventHandler() {
 
 void Play::Update() {
 	const Uint8 *keyboardstate = SDL_GetKeyboardState(NULL);
+	//JUGADOR 1
 	player1KeyMove = player1.Movement(SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_SPACE);
 	player1.PlayerPositionXY = lvl.CoordenadaACasilla(player1.Player_Position.x, player1.Player_Position.y - (LADO_CASILLA + 17) / 2);
 	player1.PlayerPositionWH = lvl.CoordenadaACasilla(player1.Player_Position.x + LADO_CASILLA - 1, player1.Player_Position.y - ((LADO_CASILLA + 17) / 2) + LADO_CASILLA - 1);
-	std::cout << player1.speed << std::endl;
+	//POWER UPs
 	if (player1.Rollers) {
 		player1.speed = 2 * 1.8;
 		//debería ser 3.6 pero como se mueve por píxeles y los píxeles son enteros, se trunca a 3 así que el boost es casi inapreciable.
@@ -285,8 +286,7 @@ void Play::Update() {
 		player1.timeDown = 10.;
 		player1.deltaTime = 0;
 	}
-	//std::cout << player1.Player_ID << " se encuentra en la posicion x y " << player1.PlayerPositionXY.x << " " << player1.PlayerPositionXY.y << std::endl;
-	//std::cout << player1.Player_ID << " se encuentra en la posicion w h " << player1.PlayerPositionWH.x << " " << player1.PlayerPositionWH.y << std::endl;
+	//MOVIMIENTO
 	if (player1KeyMove == Key::UP && player1.PlayerPositionXY.y >= lvl.limiteIJ.y && player1.Player_Position.x >= LADO_CASILLA) {
 		if ((lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::INDESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y - 1] != casillas::INDESTRUCTIBLE_WALL)
 			&& (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] != casillas::DESTRUCTIBLE_WALL && lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y - 1] != casillas::DESTRUCTIBLE_WALL)) {
@@ -327,6 +327,7 @@ void Play::Update() {
 			player1.Player_Position.x -= player1.speed;
 		}
 	}
+	//BOMBA
 	if (player1KeyMove == Key::BOMB) {
 		std::cout << "drop the bomb!" << std::endl;
 		player1.BombPositionIJ = player1.PlayerPositionXY;		
@@ -428,6 +429,7 @@ void Play::Update() {
 		player1.dropbomb = true;
 	}
 
+	//EXPLOSIÓN DE BOMBA, DESTRUCCIÓN DE MUROS Y DAÑO
 	if (player1.bomb.explotando) {
 		//ARRIBA
 		if (player1.BombPositionIJ.y > lvl.limiteIJ.y && player1.up == false) {
@@ -497,8 +499,32 @@ void Play::Update() {
 				}
 			}
 		}
+
+		if (!player1.Helmet) {
+			if ((player1.BombPositionIJ.x == player1.PlayerPositionXY.x && player1.BombPositionIJ.y - 1 == player1.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x == player1.PlayerPositionWH.x && player1.BombPositionIJ.y - 1 == player1.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x == player1.PlayerPositionXY.x && player1.BombPositionIJ.y - 2 == player1.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x == player1.PlayerPositionWH.x && player1.BombPositionIJ.y - 2 == player1.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x == player1.PlayerPositionXY.x && player1.BombPositionIJ.y + 1 == player1.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x == player1.PlayerPositionWH.x && player1.BombPositionIJ.y + 1 == player1.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x == player1.PlayerPositionXY.x && player1.BombPositionIJ.y + 2 == player1.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x == player1.PlayerPositionWH.x && player1.BombPositionIJ.y + 2 == player1.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x - 1 == player1.PlayerPositionXY.x && player1.BombPositionIJ.y == player1.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x - 1 == player1.PlayerPositionWH.x && player1.BombPositionIJ.y == player1.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x - 2 == player1.PlayerPositionXY.x && player1.BombPositionIJ.y == player1.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x - 2 == player1.PlayerPositionWH.x && player1.BombPositionIJ.y == player1.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x + 1 == player1.PlayerPositionXY.x && player1.BombPositionIJ.y == player1.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x + 1 == player1.PlayerPositionWH.x && player1.BombPositionIJ.y == player1.PlayerPositionWH.y)
+				|| (player1.BombPositionIJ.x + 2 == player1.PlayerPositionXY.x && player1.BombPositionIJ.y == player1.PlayerPositionXY.y)
+				|| (player1.BombPositionIJ.x + 2 == player1.PlayerPositionWH.x && player1.BombPositionIJ.y == player1.PlayerPositionWH.y)) {
+				std::cout << "DMG player 1";
+				player1.lifes--;
+				std::cout << "EL player 1 tiene estas vidas: " << player1.lifes << std::endl;
+			}
+		}
 	}
 
+	//CORRECCIÓN DE POSICIÓN
 	if (player1.PlayerPositionXY.y <= -1) {
 		player1.Player_Position.y = LADO_CASILLA + HUD_HEIGHT;
 	}
@@ -506,6 +532,7 @@ void Play::Update() {
 		player1.Player_Position.x = LADO_CASILLA;
 	}
 
+	//COMPROBACIÓN DE SI HA COGIDO UN POWER UP
 	if (player1.PlayerPositionXY.y >=0 && player1.PlayerPositionXY.x >=0 && player1.PlayerPositionWH.x<lvl.limiteWH.x && player1.PlayerPositionWH.y<lvl.limiteWH.y && !player1.IsPoweredUp) {
 		if (lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] == casillas::ROLLERS || lvl.tablero[player1.PlayerPositionWH.x][player1.PlayerPositionWH.y] == casillas::ROLLERS) {
 			lvl.tablero[player1.PlayerPositionXY.x][player1.PlayerPositionXY.y] = casillas::EMPTY;
@@ -520,6 +547,25 @@ void Play::Update() {
 			player1.IsPoweredUp = true;
 		}
 	}
+
+	//Daño
+	//ESTO DEBERÍA COMPROBAR SI EN LA POSICIÓN DE LA ONDA EXPANSIVA HAY UN PLAYER Y EN CASO AFIRMATIVO LE QUITA VIDA PERO NO VA.
+	//if (bomba.explotando) {
+	//	std::cout << "pupita" << std::endl;
+	//	if (lvl.tablero[tmpPosXY.x][tmpPosXY.y] == lvl.tablero[bomba.Explosion1_Position.x][bomba.Explosion1_Position.y] ||
+	//		lvl.tablero[tmpPosXY.x][tmpPosXY.y] == lvl.tablero[bomba.Explosion2_Position.x][bomba.Explosion2_Position.y] ||
+	//		lvl.tablero[tmpPosXY.x][tmpPosXY.y] == lvl.tablero[bomba.Explosion3_Position.x][bomba.Explosion3_Position.y] ||
+	//		lvl.tablero[tmpPosXY.x][tmpPosXY.y] == lvl.tablero[bomba.Explosion4_Position.x][bomba.Explosion4_Position.y] ||
+	//		lvl.tablero[tmpPosXY.x][tmpPosXY.y] == lvl.tablero[bomba.Explosion5_Position.x][bomba.Explosion5_Position.y] ||
+	//		lvl.tablero[tmpPosXY.x][tmpPosXY.y] == lvl.tablero[bomba.Explosion6_Position.x][bomba.Explosion6_Position.y] ||
+	//		lvl.tablero[tmpPosXY.x][tmpPosXY.y] == lvl.tablero[bomba.Explosion7_Position.x][bomba.Explosion7_Position.y] ||
+	//		lvl.tablero[tmpPosXY.x][tmpPosXY.y] == lvl.tablero[bomba.Explosion8_Position.x][bomba.Explosion8_Position.y]) {
+	//		lifes--;
+	//		std::cout << lifes << std::endl;
+	//	}
+	//}
+
+
 
 
 	player2KeyMove = player2.Movement(SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_RCTRL);
