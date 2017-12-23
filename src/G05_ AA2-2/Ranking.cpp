@@ -27,7 +27,7 @@ Ranking::Ranking()
 	//RANKING
 	font.id = "game_over";
 	font.path = "../../res/ttf/game_over.ttf";
-	font.size = 500;
+	font.size = 100;
 	color = { 0, 255, 255, 0 };
 	scores.color = color;
 	scores.text = "works?";
@@ -121,17 +121,17 @@ Ranking::Ranking()
 	scores9_Rect = { scores9XpositionText, scores9YpositionText, scores9.w, scores9.h };
 	scores9.id = "9";
 
-	std::vector<std::pair<std::string, std::string>> ranking;
-	ranking.push_back({ " "," " });
-	ranking.push_back({ " "," " });
-	ranking.push_back({ " "," " });
-	ranking.push_back({ " "," " });
-	ranking.push_back({ " "," " });
-	ranking.push_back({ " "," " });
-	ranking.push_back({ " "," " });
-	ranking.push_back({ " "," " });
-	ranking.push_back({ " "," " });
-	ranking.push_back({ " "," " });
+	std::vector<std::pair<int, std::string>> ranking;
+	ranking.push_back({ 0,"Nadie" });
+	ranking.push_back({ 0,"Nadie " });
+	ranking.push_back({ 0,"Nadie " });
+	ranking.push_back({ 0,"Nadie " });
+	ranking.push_back({ 0,"Nadie " });
+	ranking.push_back({ 0,"Nadie " });
+	ranking.push_back({ 0,"Nadie " });
+	ranking.push_back({ 0,"Nadie " });
+	ranking.push_back({ 0,"Nadie " });
+	ranking.push_back({ 0,"Nadie " });
 	std::string playerName;
 	int score;
 	std::ifstream fentrada("../../res/files/ranking.bin", std::ios::binary);
@@ -140,23 +140,23 @@ Ranking::Ranking()
 	}
 	while (!fentrada.eof()) {
 		fentrada >> playerName >> score;
-		ranking.push_back({ std::to_string(score),playerName });
+		ranking.push_back({ score,playerName });
 	}
 	std::sort(ranking.rbegin(), ranking.rend());
 
 	for (const auto &p : ranking) {
 		std::cout << p.first << p.second << std::endl;
 	}
-	scores.text = ranking[0].second + ' ' + (ranking[0].first);
-	scores1.text = ranking[1].second + ' ' + (ranking[1].first);
-	scores2.text = ranking[2].second + ' ' + (ranking[2].first);
-	scores3.text = ranking[3].second + ' ' + (ranking[3].first);
-	scores4.text = ranking[4].second + ' ' + (ranking[4].first);
-	scores5.text = ranking[5].second + ' ' + (ranking[5].first);
-	scores6.text = ranking[6].second + ' ' + (ranking[6].first);
-	scores7.text = ranking[7].second + ' ' + (ranking[7].first);
-	scores8.text = ranking[8].second + ' ' + (ranking[8].first);
-	scores9.text = ranking[9].second + ' ' + (ranking[9].first);
+	scores.text = ranking[0].second + ' ' + std::to_string(ranking[0].first);
+	scores1.text = ranking[1].second + ' ' + std::to_string(ranking[1].first);
+	scores2.text = ranking[2].second + ' ' + std::to_string(ranking[2].first);
+	scores3.text = ranking[3].second + ' ' + std::to_string(ranking[3].first);
+	scores4.text = ranking[4].second + ' ' + std::to_string(ranking[4].first);
+	scores5.text = ranking[5].second + ' ' + std::to_string(ranking[5].first);
+	scores6.text = ranking[6].second + ' ' + std::to_string(ranking[6].first);
+	scores7.text = ranking[7].second + ' ' + std::to_string(ranking[7].first);
+	scores8.text = ranking[8].second + ' ' + std::to_string(ranking[8].first);
+	scores9.text = ranking[9].second + ' ' + std::to_string(ranking[9].first);
 
 }
 
