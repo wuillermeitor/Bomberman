@@ -1,17 +1,11 @@
 #pragma once
 #include "Player.h"
 #include <iostream>
-#include <ctime>
 #include "Renderer.h"
 #include "Types.h"
 class HUD {
 
 public:
-	bool findeljuego = false;
-	//variable para la FINAL COUNTODOWN TIRORIO TIRORITOTI
-	clock_t lastTime = clock();
-	float timeDown = 80;
-	float deltaTime = 0;
 	//Vidas i score font y rect
 	Font font;
 	Color color;

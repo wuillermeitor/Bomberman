@@ -114,6 +114,8 @@ Play::Play(std::string level) {
 	}
 
 
+
+
 	//Load player 1
 	player1 = Player();
 	player1.Player_ID = PLAYER1_SPRITE;
@@ -134,7 +136,7 @@ Play::Play(std::string level) {
 	player1.Player_Position.w = LADO_CASILLA;
 	player1.Player_Rect.w = LADO_CASILLA;
 	player1.frameTime = 0;
-	player1.lifes = 3;
+	player1.lifes = lives;
 	player1.score = 0;
 
 	//Load player 2
@@ -155,17 +157,8 @@ Play::Play(std::string level) {
 	player2.Player_Position.w = LADO_CASILLA;
 	player2.Player_Rect.w = LADO_CASILLA;
 	player2.frameTime = 0;
-	player2.lifes = 3;
+	player2.lifes = lives;
 	player2.score = 0;
-
-	//if (level == "PLAY1") {
-	//	player1.lvl = lvl1;
-	//	player2.lvl = lvl1;
-	//}
-	//else if (level == "PLAY2") {
-	//	player1.lvl = lvl2;
-	//	player2.lvl = lvl2;
-	//}
 
 	//HUD
 	hud = HUD();
@@ -218,7 +211,7 @@ Play::Play(std::string level) {
 	//TIME
 	hud.Time.color = hud.color;
 	hud.Time.id = "texto5_ID";
-	hud.Time.text = "Time left:  " + (std::to_string(hud.timeDown));
+	hud.Time.text = "Time left:  " + (std::to_string(time));
 	hud.Time.h = 100;
 	hud.Time.w = 300;
 	hud.TimeXpositionText = 200;
@@ -236,8 +229,24 @@ Play::~Play() {
 void Play::EventHandler() {
 	SDL_Event evento;
 	while (SDL_PollEvent(&evento)) {
-		if (hud.findeljuego || player1.lifes == 0 || player2.lifes == 0) {
+		if (findeljuego || player1.lifes == 0 || player2.lifes == 0) {
+			std::cout << "Guanyador, introdueix el teu nom per consola" << std::endl;
+			std::cin >> ganador;
+			std::cout << " Guanyador introduit" << std::endl;
+			std::ofstream fsalida("../../res/files/ranking.bin", std::ios::binary | std::ios::app);
+			std::cout << " Obro binari " << std::endl;
+			if (player1.score > player2.score) { scoreganador = player1.score; }
+			if (player2.score >= player1.score) { scoreganador = player2.score; }
+			ganadorRanking = ganador + " " + std::to_string((scoreganador));
+			fsalida << ganador << ' ' << scoreganador << ' ';
+
+
+
+			std::cout << "En teoria he escrit ganador + score" << std::endl;
+			fsalida.close();
+			std::cout << " Fitxer binari " << std::endl;
 			scenestate = SceneState::GOTOMENU;
+			return;
 		}
 	}
 }
@@ -424,12 +433,14 @@ void Play::Update() {
 		if (player1.BombPositionIJ.y > lvl.limiteIJ.y && player1.up == false) {
 			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 1] == casillas::DESTRUCTIBLE_WALL)
 			{
+				player1.score += WallScore;
 				lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 1] = casillas::EMPTY;
 				lvl.Update(player1.BombPositionIJ.x, player1.BombPositionIJ.y - 1);
 			}
 			if (player1.BombPositionIJ.y > lvl.limiteIJ.y + 1 && player1.up2 == false) {
 				if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 2] == casillas::DESTRUCTIBLE_WALL)
 				{
+					player1.score += WallScore;
 					lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y - 2] = casillas::EMPTY;
 					lvl.Update(player1.BombPositionIJ.x, player1.BombPositionIJ.y - 1);
 				}
@@ -439,12 +450,14 @@ void Play::Update() {
 		if (player1.BombPositionIJ.y < lvl.limiteWH.y - 1 && player1.down == false) {
 			if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 1] == casillas::DESTRUCTIBLE_WALL)
 			{
+				player1.score += WallScore;
 				lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 1] = casillas::EMPTY;
 				lvl.Update(player1.BombPositionIJ.x, player1.BombPositionIJ.y - 1);
 			}
 			if (player1.BombPositionIJ.y < lvl.limiteWH.y - 2 && player1.down2 == false) {
 				if (lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 2] == casillas::DESTRUCTIBLE_WALL)
 				{
+					player1.score += WallScore;
 					lvl.tablero[player1.BombPositionIJ.x][player1.BombPositionIJ.y + 2] = casillas::EMPTY;
 					lvl.Update(player1.BombPositionIJ.x, player1.BombPositionIJ.y + 2);
 				}
@@ -454,12 +467,14 @@ void Play::Update() {
 		if (player1.BombPositionIJ.x > lvl.limiteIJ.x && player1.left == false) {
 			if (lvl.tablero[player1.BombPositionIJ.x - 1][player1.BombPositionIJ.y] == casillas::DESTRUCTIBLE_WALL)
 			{
+				player1.score += WallScore;
 				lvl.tablero[player1.BombPositionIJ.x - 1][player1.BombPositionIJ.y] = casillas::EMPTY;
 				lvl.Update(player1.BombPositionIJ.x - 1, player1.BombPositionIJ.y);
 			}
 			if (player1.BombPositionIJ.x > lvl.limiteIJ.x + 1 && player1.left2 == false) {
 				if (lvl.tablero[player1.BombPositionIJ.x - 2][player1.BombPositionIJ.y] == casillas::DESTRUCTIBLE_WALL)
 				{
+					player1.score += WallScore;
 					lvl.tablero[player1.BombPositionIJ.x - 2][player1.BombPositionIJ.y] = casillas::EMPTY;
 					lvl.Update(player1.BombPositionIJ.x - 2, player1.BombPositionIJ.y);
 				}
@@ -469,12 +484,14 @@ void Play::Update() {
 		if (player1.BombPositionIJ.x < lvl.limiteWH.x - 1 && player1.right == false) {
 			if (lvl.tablero[player1.BombPositionIJ.x + 1][player1.BombPositionIJ.y] == casillas::DESTRUCTIBLE_WALL)
 			{
+				player1.score += WallScore;
 				lvl.tablero[player1.BombPositionIJ.x + 1][player1.BombPositionIJ.y] = casillas::EMPTY;
 				lvl.Update(player1.BombPositionIJ.x + 1, player1.BombPositionIJ.y);
 			}
 			if (player1.BombPositionIJ.x < lvl.limiteWH.x - 2 && player1.right2 == false) {
 				if (lvl.tablero[player1.BombPositionIJ.x + 2][player1.BombPositionIJ.y] == casillas::DESTRUCTIBLE_WALL)
 				{
+					player1.score += WallScore;
 					lvl.tablero[player1.BombPositionIJ.x + 2][player1.BombPositionIJ.y] = casillas::EMPTY;
 					lvl.Update(player1.BombPositionIJ.x + 2, player1.BombPositionIJ.y);
 				}
@@ -510,7 +527,23 @@ void Play::Update() {
 	//std::cout << player2.Player_ID << " se encuentra en la posicion " << player2.PlayerPositionXY.x << " " << player2.PlayerPositionXY.y << std::endl;
 
 
-
+	//Clock Update
+	if (time > 0) {
+		deltaTime = (clock() - lastTime);
+		lastTime = clock();
+		deltaTime /= CLOCKS_PER_SEC;
+		time -= deltaTime;
+		//std::cout << timeDown << std::endl;
+		hud.Time.text = "Time left:  " + (std::to_string(static_cast<int>(time)));
+		std::cout << lastTime << std::endl;
+	}
+	if (time <= 0) {
+		//std::cout << "FIN DEL JUEGO" << std::endl;
+		hud.Time.text = "FIN DEL JUEGO";
+		findeljuego = true;
+	}
+	hud.P1score.text = "Score p1:  " + std::to_string(player1.score);
+	hud.P2score.text = "Score p2:  " + std::to_string(player2.score);
 	hud.Update();
 
 }

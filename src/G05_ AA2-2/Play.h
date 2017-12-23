@@ -15,6 +15,9 @@ class Play : public Scene {
 public:
 	//variables
 	std::string BG_ID;
+	std::string ganador;
+	int scoreganador;
+	std::string ganadorRanking;
 	SDL_Rect BG_Rect{ 0,0,SCREEN_WIDTH, SCREEN_HEIGHT };
 	Player player1;
 	Player player2;
@@ -23,8 +26,12 @@ public:
 	Level lvl;
 	HUD hud;
 	int lives;
-	int time;
-
+	float time;
+	bool findeljuego = false;
+	clock_t lastTime = clock();
+	float deltaTime = 0;
+	int WallScore = 15;
+	int KillScore = 100;
 
 	Play(std::string level);
 	~Play();
