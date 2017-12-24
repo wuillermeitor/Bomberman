@@ -518,10 +518,9 @@ void Play::Update() {
 				|| (player1.BombPositionIJ.x + 1 == player1.PlayerPositionWH.x && player1.BombPositionIJ.y == player1.PlayerPositionWH.y)
 				|| (player1.BombPositionIJ.x + 2 == player1.PlayerPositionXY.x && player1.BombPositionIJ.y == player1.PlayerPositionXY.y)
 				|| (player1.BombPositionIJ.x + 2 == player1.PlayerPositionWH.x && player1.BombPositionIJ.y == player1.PlayerPositionWH.y)) {
-				std::cout << "Traicioando por mi propio fuego" << std::endl;
 				if (player1.Helmet) {
-					std::cout << "Tenia casco tonto" << std::endl;
 					player1.Helmet = false;
+					player1.IsPoweredUp = false;
 					player1.alreadyDamaged = true;
 				}
 				else {
@@ -551,6 +550,7 @@ void Play::Update() {
 				|| (player1.BombPositionIJ.x + 2 == player2.PlayerPositionWH.x && player1.BombPositionIJ.y == player2.PlayerPositionWH.y)) {
 				if (player2.Helmet) {
 					player2.Helmet = false;
+					player2.IsPoweredUp = false;
 					player2.alreadyDamaged = true;
 				}
 				else {
@@ -854,6 +854,7 @@ void Play::Update() {
 				|| (player2.BombPositionIJ.x + 2 == player2.PlayerPositionWH.x && player2.BombPositionIJ.y == player2.PlayerPositionWH.y)) {
 				if (player2.Helmet) {
 					player2.Helmet = false;
+					player2.IsPoweredUp = false;
 					player2.alreadyDamaged = true;
 				}
 				else {
@@ -882,6 +883,7 @@ void Play::Update() {
 				|| (player2.BombPositionIJ.x + 2 == player1.PlayerPositionWH.x && player2.BombPositionIJ.y == player1.PlayerPositionWH.y)) {
 				if (player1.Helmet) {
 					player1.Helmet = false;
+					player1.IsPoweredUp = false;
 					player1.alreadyDamaged = true;
 				}
 				else {

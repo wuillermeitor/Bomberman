@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Bomb">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>RLQPAYDCgCEFgsCAMIABCkAAABAJRAAiEAAABEKAgCA=</HashCode>
+      <FileName>Bomb.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Button">
+    <Position X="12.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEIAAAAQAIAAAAgAAAoxAAAAQAAAAACAAAAAAAEEAAA=</HashCode>
+      <FileName>Button.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game">
+    <Position X="9.25" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAEAAAAAAAAAiAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Game.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObject">
+    <Position X="11" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAACAAAAAAAAAAAAAIBAAgAAAAAQEAgAEAAAAIAACA=</HashCode>
+      <FileName>GameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HUD">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQYAgAIAABAACgAcAABAAAEABSgAAACAAgBAAAAIgQI=</HashCode>
+      <FileName>HUD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Level">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gCyBACAAKQAAAwkCAAgAAAgAAAIAAkARChAEAAAAgBI=</HashCode>
+      <FileName>Level.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Menu">
+    <Position X="0.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQAgAAAAABAAgAAAAAAACARAAAIAgAQADAAAAAAAAA=</HashCode>
+      <FileName>Menu.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Play">
+    <Position X="2.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wARBgAgAgBEAAgIAAAAAIgAEAAIACAASgBAAAAAABAE=</HashCode>
+      <FileName>Play.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAgAAICEECAgCABBiJAgUCAAKIQQIwCQAgMwCAgDI=</HashCode>
+      <FileName>Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ranking">
+    <Position X="5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACYIoAoIwwAAAgJQAUQIQACAAAAAEAK4ADAggHcYBVU=</HashCode>
+      <FileName>Ranking.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Renderer">
+    <Position X="9.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAkAAAAAAAAACAAAEAAAAAAAAAAAAAAYBCEARBAoAg=</HashCode>
+      <FileName>Renderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene">
+    <Position X="2.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQAgAAgAAAAAgAAgAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Rect">
+    <Position X="14.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAhgAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Color">
+    <Position X="14.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAQABAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Vector2">
+    <Position X="14.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_001b_1">
+    <Position X="14.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIACAAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_001b_2">
+    <Position X="14.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACIQAgAAAAAAgA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="casillas">
+    <Position X="16.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAIAAABEAAAAAAAAAAAAiAAAAAAAAAACAAAAEAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Key">
+    <Position X="16.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAQAAAAAAAAICAAAgAACAAAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GameState">
+    <Position X="16.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAMAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SceneState">
+    <Position X="16.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAACAAAAgAIEAAAAAAACAAAAAA=</HashCode>
+      <FileName>Types.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
